@@ -1,0 +1,24 @@
+{
+  "name": "@kamkam1_0/discord-commandhandler",
+  "version": "1.5.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KamKam0/commandhandler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KamKam0/commandhandler/issues"
+  },
+  "keywords": ["Discordjs", "Commands", "Handler"],
+  "homepage": "https://github.com/KamKam0/commandhandler",
+  "author": "KamKam <kamkam.dev.contact@gmail.com>",
+  "license": "BSD 2",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "@kamkam1_0/discord.js": "^3.2.1"
+  }
+}
