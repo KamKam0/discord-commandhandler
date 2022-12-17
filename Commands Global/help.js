@@ -1,6 +1,6 @@
 module.exports = {
     async execute(bot , receiving, Langue){
-        const Discord = require("Discord.js")
+        const Discord = require("@kamkam1_0/discord.js")
         let precision
         
         if(receiving.typee === "slash") precision =  receiving.data.options ? receiving.data.options[0].value: undefined
@@ -84,7 +84,7 @@ function base_protocole(bot, embed, type_s, Langue, receiving){
 }
 
 function send_protocole(embed, receiving, Langue){
-    const Discord = require("Discord.js")
+    const Discord = require("@kamkam1_0/discord.js")
     let buttonleft = new Discord.Button()
     .setCustomID("help_left")
     .setStyle("SECONDARY")

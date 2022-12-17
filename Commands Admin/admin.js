@@ -1,6 +1,6 @@
 module.exports = {
     async execute(bot, receiving){
-        const Discord = require("Discord.js")
+        const Discord = require("@kamkam1_0/discord.js")
         let embed = new Discord.Embed()
         const bdd = bot.config
 

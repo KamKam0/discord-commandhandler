@@ -2,7 +2,7 @@ const autorisation = "ADMINISTRATOR"
 module.exports = {
     async execute(bot , receiving, Langue){
         const fs = require("fs")
-        const Discord = require("Discord.js")
+        const Discord = require("@kamkam1_0/discord.js")
         
         if(!receiving.member.haspermission(autorisation)) return receiving.error(Langue["perm_commande"])
 

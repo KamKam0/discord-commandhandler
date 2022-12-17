@@ -1,6 +1,6 @@
 module.exports = {
     async execute(bot , receiving, Langue){
-        const Discord = require("Discord.js")
+        const Discord = require("@kamkam1_0/discord.js")
 
         if(receiving.typee === "message") return receiving.error("Pour exécuter la commande feedback, vous devez passer pour la commande slash")
 

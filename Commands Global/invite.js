@@ -1,6 +1,6 @@
 module.exports = {
     async execute(bot , receiving, Langue){
-        const Discord = require("Discord.js")
+        const Discord = require("@kamkam1_0/discord.js")
         
         let time = (process.uptime()).toFixed(0)
         let def;
