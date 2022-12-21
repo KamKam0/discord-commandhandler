@@ -32,7 +32,7 @@ module.exports = {
             if(err) return receiving.error("Fonction VIP non activée pour ce bot")
             switch(action){
                 case("add"):
-                    if(receiving.user.id !== bdd["Général"]["ID créateur"]) return
+                    if(receiving.user.id !== bdd["general"]["ID createur"]) return
                     if(!ID || isNaN(ID)) return receiving.error("Vous avez fait une erreur dans la commande ! C'est: ``vip [ID]``").catch(err =>{})
             
                     if(ID.length !== 18) return receiving.error("Vous avez fait une erreur dans la commande ! C'est: ``vip [ID]``").catch(err =>{})
@@ -83,7 +83,7 @@ module.exports = {
 
                 break;
                 case("remove"):
-                    if(receiving.user.id !== bdd["Général"]["ID créateur"]) return
+                    if(receiving.user.id !== bdd["general"]["ID createur"]) return
                     if(!ID || isNaN(ID)) return  receiving.error("Vous avez fait une erreur dans la commande").catch(err =>{})
             
                     if(ID.length !== 18) return receiving.error("Vous avez fait une erreur dans la commande").catch(err =>{})
@@ -145,6 +145,6 @@ module.exports = {
 module.exports.help = {
     name: "vip",
     type: "Server and PV",
-    autorisation: "Créateur",
+    autorisation: "createur",
     langues: require("../Utils/getLangues")()
 }

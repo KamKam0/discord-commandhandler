@@ -36,7 +36,7 @@ module.exports = {
         bot.sql.query(`SELECT * FROM admin`, async function(err, result){
             switch(action){
                 case("add"):
-                    if(receiving.user.id !== bdd["Général"]["ID créateur"]) return
+                    if(receiving.user.id !== bdd["general"]["ID createur"]) return
                     if(result[0]) if(result.find(c => bot.decryptID(c.ID) == ID)) return receiving.error("L'ID est déjà enregistré sous le pseudo de " + result.find(c => bot.decryptID(c.ID) == ID).Pseudo).catch(err => {})
                     if(!Pseudo) Pseudo = "/"
                     bot.sql.query(`INSERT INTO admin (Pseudo, ID) VALUES ('${Pseudo}', '${bot.encryptID(ID)}')`)
@@ -54,7 +54,7 @@ module.exports = {
                     } 
                 break;
                 case("remove"):
-                    if(receiving.user.id !== bdd["Général"]["ID créateur"]) return
+                    if(receiving.user.id !== bdd["general"]["ID createur"]) return
                     if(!ID || isNaN(ID)) return receiving.error("Vous avez fait une erreur dans la commande").catch(err =>{})
             
                     if(!result[0]) return receiving.error("L'ID n'est pas inscrit en tant qu'administarteur du bot du bot").catch(err =>{})
@@ -108,6 +108,6 @@ module.exports = {
 module.exports.help = {
     name: "admin",
     type: "Server and PV",
-    autorisation: "Créateur",
+    autorisation: "createur",
     langues: require("../Utils/getLangues")()
 }

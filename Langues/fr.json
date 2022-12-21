@@ -3,7 +3,7 @@
     "Langue_Code": "fr",
     "Help": {
         "help_name": "help",
-        "help_description": "Donne des informations générales sur la commande",
+        "help_description": "Donne des informations generales sur la commande",
         "help_composition": "/help",
         "help_exemple": "/help",
         "feedback_name": "feedback",
@@ -31,7 +31,7 @@
         "restart_composition": "/restart",
         "restart_exemple": "/restart",
         "botinfo_name": "botinfo",
-        "botinfo_description": "Voir les informations générales du bot",
+        "botinfo_description": "Voir les informations generales du bot",
         "botinfo_composition": "/botinfo",
         "botinfo_exemple": "/botinfo",
         "admin_name": "admin",

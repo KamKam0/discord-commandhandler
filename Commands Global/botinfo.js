@@ -21,7 +21,7 @@ module.exports = {
                 {name: Langue["Propriété de"], value: "KamKam#6168", inline: true},
                 {name: Langue["Développé par"], value: "KamKam#6168", inline: true},
                 {name: "\u200b", value: "\u200b", inline: false},
-                {name: Langue["Serveur Support"], value: bot.config["Général"]["inviteDiscord"], inline: true},
+                {name: Langue["Serveur Support"], value: bot.config["general"]["inviteDiscord"], inline: true},
                 {name: Langue["Sécurité"], value: Langue["SCT1"], inline: true},
                 {name: "\u200b", value: "\u200b", inline: false},
                 {name: Langue["Darkness"], value: Langue["Darkness1"], inline: true}

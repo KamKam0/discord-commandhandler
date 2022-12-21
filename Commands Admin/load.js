@@ -24,6 +24,6 @@ module.exports = {
 }
 module.exports.help = {
     type: "Server and PV",
-    autorisation: "Créateur",
+    autorisation: "createur",
     langues: require("../Utils/getLangues")()
 }

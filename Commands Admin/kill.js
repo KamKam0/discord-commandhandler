@@ -3,7 +3,7 @@ module.exports = {
         const Discord = require("@kamkam1_0/discord.js")
             const bdd = bot.config
 
-            if(receiving.user.id !== bdd["Général"]["ID créateur"]) return
+            if(receiving.user.id !== bdd["general"]["ID createur"]) return
             const embed = new Discord.Embed()
             .setColor("RED")
             .setDescription("Êtes-vous sur de vouloir éteindre le bot sans possibilité de redémarrage à distance ?")
