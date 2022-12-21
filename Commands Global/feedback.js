@@ -25,5 +25,6 @@ module.exports = {
 module.exports.help = {
     type: "Server and PV",
     autorisation: "AUCUNE",
-    cooldown: 86400
+    cooldown: 86400,
+    langues: require("../Utils/getLangues")()
 }

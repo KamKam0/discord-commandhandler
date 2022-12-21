@@ -49,5 +49,6 @@ module.exports.help = {
           required: true,
           type: 3
         }
-    ]
+    ],
+    langues: require("../Utils/getLangues")()
 }
