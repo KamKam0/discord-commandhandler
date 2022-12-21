@@ -145,5 +145,6 @@ module.exports = {
 module.exports.help = {
     name: "vip",
     type: "Server and PV",
-    autorisation: "Créateur"
+    autorisation: "Créateur",
+    langues: require("../Utils/getLangues")()
 }

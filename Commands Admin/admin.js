@@ -108,5 +108,6 @@ module.exports = {
 module.exports.help = {
     name: "admin",
     type: "Server and PV",
-    autorisation: "Créateur"
+    autorisation: "Créateur",
+    langues: require("../Utils/getLangues")()
 }
