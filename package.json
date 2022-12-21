@@ -19,6 +19,6 @@
   "license": "BSD 2",
   "dependencies": {
     "fs": "^0.0.1-security",
-    "@kamkam1_0/discord.js": "^3.2.1"
+    "@kamkam1_0/discord.js": "^3.3.9"
   }
 }
