@@ -53,7 +53,6 @@ module.exports = {
                 
             }else base_protocole(bot, embed, type_s, Langue, receiving)
         }else base_protocole(bot, embed, type_s, Langue, receiving)
-
     }
 }
 
@@ -79,11 +78,11 @@ function base_protocole(bot, embed, type_s, Langue, receiving){
     dirs_t.forEach(command => {
         const file = command
         embed.addField(file.name, Langue["Help"][`${file.name}_description`])
-        if(embed.fields.length === 25 || embed.fields.length === number) send_protocole(embed, receiving, Langue)
+        if(embed.fields.length === 25 || embed.fields.length === number) send_protocole(bot, embed, receiving, Langue)
     })
 }
 
-function send_protocole(embed, receiving, Langue){
+async function send_protocole(bot, embed, receiving, Langue){
     const Discord = require("@kamkam1_0/discord.js")
     let buttonleft = new Discord.Button()
     .setCustomID("help_left")
@@ -93,7 +92,58 @@ function send_protocole(embed, receiving, Langue){
     .setCustomID("help_right")
     .setStyle("SECONDARY")
     .setEmoji("▶️")
-    receiving.reply({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
+    let msg = await receiving.reply({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
+    let collector = bot.collectInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 60, id: ["help_right", "help_left"], user_id: receiving.user_id})
+    collector.once("end", () => msg.delete())
+    collector.on("collecting", (bo, da) => {
+        let buttonleft = new Discord.Button()
+        .setCustomID("help_left")
+        .setStyle("SECONDARY")
+        .setEmoji("◀️")
+        let buttonright = new Discord.Button()
+        .setCustomID("help_right")
+        .setStyle("SECONDARY")
+        .setEmoji("▶️")
+
+        let positions = da.message.embeds[0].footer.text.split("\n").map(text => {
+            return {position: Number(text.split("->")[1].split("/")[0].trim()) - 1, name: text.split("->")[0].trim(), current: da.message.embeds[0].title.split(" ")[1].trim() === text.split("->")[0].trim() ? true : false}
+        })
+        
+        if(positions.find(h => h.current).position === 0 && da.custom_id === "help_left"){
+            positions.find(h => h.position === 0).current = false
+            positions.find(h => h.position === Number(Math.max(...positions.map(h => h.position)))).current = true
+        }
+        else if(positions.find(h => h.current).position === Math.max(...positions.map(h => h.position)) && da.custom_id === "help_right"){
+            positions.find(h => h.position === 0).current = true
+            positions.find(h => h.position === Number(Math.max(...positions.map(h => h.position)))).current = false
+        }
+        else{
+            let inital = positions.find(h => h.current).position
+            positions.find(h => h.position === inital).current = false
+            positions.find(h => h.position === ((da.custom_id === "help_left") ? (inital - 1) : (inital + 1))).current = true
+        }
+
+        let name = positions.find(h => h.current).name
+
+        let embed = new Discord.Embed()
+        .setTitle(`${Langue["Aide"]} ${name}`)
+        .setColor("BLUE")
+        .setFooterText(da.message.embeds[0].footer.text)
+
+
+        let dirs_t = bo.handler.GetHandler(bo.handler.names.find(e => e.toLowerCase() === name.toLowerCase())).GetCommands()
+
+        dirs_t.forEach(command => {
+            embed.addField(command.name, Langue["Help"][`${command.name.split(".")[0]}_description`])
+        })
+
+        da.message.modify({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
+        da.reply({ephemeral: true, content: Langue["h_2"]}).then(() => {
+            setTimeout(() => {
+            da.deletereply().catch(err => {})
+            }, 5 * 1000)
+        })
+    })
 }
 
 function translate_level(level){

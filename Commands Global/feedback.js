@@ -19,6 +19,32 @@ module.exports = {
         .AddTextInputs([TextInput])
 
         receiving.reply({modal: Modal}).catch(err => {})
+
+        bot.awaitInteractions({id: "Modal Feedback", user_id: receiving.user_id, number: 1})
+        .then(int => {
+            const Discord = require("@kamkam1_0/discord.js")
+            let feedback = int[0].components.find(e => e.components[0].custom_id === "Feedback_content").components[0].value
+            let c = bot.channels.get(bot.config.general["fbackchannel"])
+            if(!c){
+                int[0].error(Langue["feedback_1"]).catch(err =>{})
+                bot.SendMessage(bot.creator.channel_id, {content: Langue["feedback_2"]})
+                return
+            }
+            if(!feedback || String(feedback).trim().length === 0) return int[0].error(Langue["feedback_7"]).catch(err =>{})
+            if(feedback.length > 1500) return int[0].error(Langue["feedback_3"]).catch(err =>{})
+            let embed = new Discord.Embed()
+            .setTitle("Nouveau feedback de " + int[0].user.username)
+            .setThumbnail(int[0].user.avatarURL)
+            .setFooterText("User ID:" + " " + `${int[0].user.id}`)
+            .addField("Contenu du feedback", feedback)
+            .setColor("BLUE")
+            const RespondButton = new Discord.Button()
+            .setCustomID("Response_ticket_button")
+            .setEmoji("📥")
+            .setStyle("DANGER")
+            c.send({embeds: [embed], components: [RespondButton]}).catch(err =>{ })
+            int[0].success(Langue["feedback_6"]).catch(err =>{})
+        })
     }
 }
 
