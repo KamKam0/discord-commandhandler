@@ -10,7 +10,7 @@ module.exports = {
         .setColor("PURPLE")
         
         let VID = receiving.user.id
-        let type_s = await bot.vstatus(bot, VID)
+        let type_s = await bot.__userStatus(VID)
 
         if(precision){
             let commandt;

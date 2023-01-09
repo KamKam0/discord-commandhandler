@@ -97,7 +97,7 @@ class Handlers{
     }
 
     async Analyse(bot, receiving, Langue, cooldown){
-        let type_s = await bot.vstatus(bot, receiving.user_id)
+        let type_s = await bot.__userStatus(receiving.user_id)
         let name;
         let command;
         if(receiving.typee === "message") name = receiving.content.split(bot.user.id)[1].slice(1).split(" ").filter(e => e !== "")[0]

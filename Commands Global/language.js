@@ -16,7 +16,7 @@ module.exports = {
 
         if(!bot.sql) return receiving.error("La base de donnée SQL n'est pas initialisée")
         
-        bot.sql.query(`SELECT * FROM general WHERE ID = '${receiving.guild.vguild_id}'`, function(err, vraibdd){
+        bot.sql.query(`SELECT * FROM general WHERE ID = '${receiving.guild.id}'`, function(err, vraibdd){
             if(Language === vraibdd[0]["Language"]) return receiving.error(Langue["la_1"] + " " + Language).catch(err =>{})
     
             if(!bot.langues.find(e => e.Langue_Code) || !Language){
@@ -32,7 +32,7 @@ module.exports = {
                 return
             }
     
-            bot.sql.query(`UPDATE general SET Language = '${Language}' WHERE ID = '${receiving.guild.vguild_id}'`)
+            bot.sql.query(`UPDATE general SET Language = '${Language}' WHERE ID = '${receiving.guild.id}'`)
             receiving.guild.db_language = Language
             receiving.success(bot.langues.find(e => e.Langue_Code)["la_3"])
             .catch(err => {})
