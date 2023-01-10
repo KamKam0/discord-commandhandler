@@ -105,10 +105,10 @@ class Handlers{
 
         if(name === undefined) return
         
-        if(type_s === "ALL") command = this.GetCommand(name)
-        if(type_s === "VIP") command = this.GetCommand_fi(name) || this.GetHandler("VIP").GetCommand(name)
-        if(type_s === "Admin") command = this.GetCommand_fi(name) || this.GetHandler("Admin").GetCommand(name)
-        if(type_s === "User") command = this.GetCommand_fi(name)
+        if(type_s.value === 4 || type_s.value === 3) command = this.GetCommand(name)
+        if(type_s.value === 1) command = this.GetCommand_fi(name) || this.GetHandler("VIP").GetCommand(name)
+        if(type_s.value === 2) command = this.GetCommand_fi(name) || this.GetHandler("Admin").GetCommand(name)
+        if(type_s.value === 0) command = this.GetCommand_fi(name)
 
         if(command){
             if(!receiving.guild_id){
