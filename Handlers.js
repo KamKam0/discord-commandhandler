@@ -139,7 +139,8 @@ class Handlers{
 
             if(command.help.langues && command.help.langues[0] && command.help.langues.find(la => la.Langue_Code === Langue.Langue_Code)) Langue = command.help.langues.find(la => la.Langue_Code === Langue.Langue_Code)
             
-            command.execute(bot, receiving, Langue)
+            if(command.name === "help") command.execute(bot, receiving, Langue, bot.langues.find(la => la.Langue_Code === Langue.Langue_Code))
+            else command.execute(bot, receiving, Langue)
         }
 
         if(!command && receiving.typee === "slash"){

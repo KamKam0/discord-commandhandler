@@ -1,5 +1,5 @@
 module.exports = {
-    async execute(bot , receiving, Langue){
+    async execute(bot , receiving, Langue, Langue2){
         const Discord = require("@kamkam1_0/discord.js")
         let precision
         
@@ -15,13 +15,13 @@ module.exports = {
         if(precision){
             let commandt;
                     
-            if(type_s === "ALL") commandt = bot.handler.GetCommand(precision)
-            if(type_s === "VIP") commandt = bot.handler.GetCommand_fi(precision) || bot.handler.GetHandler("VIP").GetCommand(precision)
-            if(type_s === "Admin") commandt = bot.handler.GetCommand_fi(precision) || bot.handler.GetHandler("Admin").GetCommand(precision)
-            if(type_s === "User") commandt = bot.handler.GetCommand_fi(precision)
+            if(type_s.value === 4 || type_s.value === 3) commandt = bot.handler.GetCommand(precision)
+            if(type_s.value === 1) commandt = bot.handler.GetCommand_fi(precision) || bot.handler.GetHandler("VIP").GetCommand(precision)
+            if(type_s.value === 2) commandt = bot.handler.GetCommand_fi(precision) || bot.handler.GetHandler("Admin").GetCommand(precision)
+            if(type_s.value === 0) commandt = bot.handler.GetCommand_fi(precision)
 
             if(commandt){
-                if(commandt.help.nsfw && type_s !== "ALL") return base_protocole(bot, embed, type_s, Langue, receiving)
+                if(commandt.help.nsfw && type_s.value !== 4) return base_protocole(bot, embed, type_s, Langue, receiving)
                 let p = commandt.help.type
                 if(!p) p = "Serveur"
                 if(p.includes("PV")) p = p.replace("PV", "Privé")
@@ -51,20 +51,19 @@ module.exports = {
                 
                 receiving.reply({embeds: [embed]}).catch(err =>{})
                 
-            }else base_protocole(bot, embed, type_s, Langue, receiving)
-        }else base_protocole(bot, embed, type_s, Langue, receiving)
+            }else base_protocole(bot, embed, type_s, Langue, receiving, Langue2)
+        }else base_protocole(bot, embed, type_s, Langue, receiving, Langue2)
     }
 }
 
-function base_protocole(bot, embed, type_s, Langue, receiving){
+function base_protocole(bot, embed, type_s, Langue, receiving, Langue2){
     let toadd = []
-    if(type_s === "ALL") toadd = bot.handler.handlers.map(ha => ha.name)
-    else toadd = bot.handler.handlers.filter(ha => (translate_level(type_s) >= translate_level(ha.level)) && ha.name !== "NSFWS" ).map(ha => ha.name)
+    if(type_s.value !== 4 && type_s.value === 4) toadd = bot.handler.handlers.map(ha => ha.name)
+    else toadd = bot.handler.handlers.filter(ha => (type_s.value >= translate_level(ha.level)) && ha.name !== "NSFWS" ).map(ha => ha.name)
 
     toadd = toadd.map((name, acc) => {
         return {position: acc, name: name}
     })
-    
     let dirs_t = bot.handler.GetHandler(bot.handler.names.find(e => e.toLowerCase() === toadd.find(e => e.position === 0).name.toLowerCase())).GetCommands()
     let number = dirs_t.length
 
@@ -78,11 +77,11 @@ function base_protocole(bot, embed, type_s, Langue, receiving){
     dirs_t.forEach(command => {
         const file = command
         embed.addField(file.name, Langue["Help"][`${file.name}_description`])
-        if(embed.fields.length === 25 || embed.fields.length === number) send_protocole(bot, embed, receiving, Langue)
+        if(embed.fields.length === 25 || embed.fields.length === number) send_protocole(bot, embed, receiving, Langue, Langue2)
     })
 }
 
-async function send_protocole(bot, embed, receiving, Langue){
+async function send_protocole(bot, embed, receiving, Langue, Langue2){
     const Discord = require("@kamkam1_0/discord.js")
     let buttonleft = new Discord.Button()
     .setCustomID("help_left")
@@ -130,19 +129,19 @@ async function send_protocole(bot, embed, receiving, Langue){
         .setColor("BLUE")
         .setFooterText(da.message.embeds[0].footer.text)
 
-
         let dirs_t = bo.handler.GetHandler(bo.handler.names.find(e => e.toLowerCase() === name.toLowerCase())).GetCommands()
 
         dirs_t.forEach(command => {
-            embed.addField(command.name, Langue["Help"][`${command.name.split(".")[0]}_description`])
+            if(command.handler === "Global" || command.handler === "Admin") embed.addField(command.name, Langue["Help"][`${command.name.split(".")[0]}_description`])
+            else embed.addField(command.name, Langue2["Help"][`${command.name.split(".")[0]}_description`])
         })
 
         da.message.modify({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
         da.reply({ephemeral: true, content: Langue["h_2"]}).then(() => {
             setTimeout(() => {
-            da.deletereply().catch(err => {})
+                da.deletereply().catch(err => {})
             }, 5 * 1000)
-        })
+        }).catch(err => {})
     })
 }
 
@@ -153,7 +152,8 @@ function translate_level(level){
         "user": 0,
         "vip": 1,
         "admin": 2,
-        "superadmin": 3
+        "superadmin": 3,
+        "owner": 4
     }
     let transfo = convert[level]
     return transfo
