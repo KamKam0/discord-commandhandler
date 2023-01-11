@@ -20,6 +20,7 @@ module.exports = {
         bot.awaitInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 15, id: ["kill", "not_kill"], number: 1, user_id: bot.config.general["ID createur"]})
         .then(int => {
             msg.delete()
+            if(!int[0]) return
             if(int[0].custom_id === "kill") int[0].info("Le bot s'éteint !", "send").then(() => process.exit()).catch(err => {})
             if(int[0].custom_id === "not_kill") int[0].info("Le bot ne s'éteindra pas !", "send").catch(err => {})
         })

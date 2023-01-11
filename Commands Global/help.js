@@ -92,8 +92,11 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
     .setStyle("SECONDARY")
     .setEmoji("▶️")
     let msg = await receiving.reply({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
-    let collector = bot.collectInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 60, id: ["help_right", "help_left"], user_id: receiving.user_id})
-    collector.once("end", () => msg.delete())
+    let collector = bot.collectInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 05, id: ["help_right", "help_left"], user_id: receiving.user_id})
+    collector.once("end", () => {
+        if(receiving.typee === "slash") receiving.deletereply()
+        if(receiving.typee === "message") msg.delete()
+    })
     collector.on("collecting", (bo, da) => {
         let buttonleft = new Discord.Button()
         .setCustomID("help_left")

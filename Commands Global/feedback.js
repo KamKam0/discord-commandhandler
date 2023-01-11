@@ -22,6 +22,7 @@ module.exports = {
 
         bot.awaitInteractions({id: "Modal Feedback", user_id: receiving.user_id, number: 1})
         .then(int => {
+            if(!int[0]) return
             const Discord = require("@kamkam1_0/discord.js")
             let feedback = int[0].components.find(e => e.components[0].custom_id === "Feedback_content").components[0].value
             let c = bot.channels.get(bot.config.general["fbackchannel"])
