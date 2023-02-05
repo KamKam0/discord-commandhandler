@@ -25,20 +25,20 @@ module.exports = {
             switch(type){
                 case("memory"):
                     embed.setTitle("BIA - Memory")
-                    embed.addFields([
+                    embed.addFields(
                         {name: "Memory used", value: Number(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(1) + ' Mb', inline: true},
                         {name: "Memory total", value: Number(os.totalmem() / 1024 / 1024).toFixed(2) + " Mb", inline: true}
-                    ])
+                    )
                     receiving.reply({embeds: [embed]}).catch(err =>{})
                 break;
                 case("pc"):
                     embed
                     .setTitle("BIA - PC")
-                    .addFields([
+                    .addFields(
                         {name: "architecture", value: os.arch(), inline: true},
                         {name: "OS", value: os.platform(), inline: true},
                         {name: "Version OS", value: `${os.type()} ${os.release()}`, inline: true}
-                    ])
+                    )
     
                     receiving.reply({embeds: [embed]}).catch(err =>{})
                 break;
@@ -47,38 +47,38 @@ module.exports = {
                     average = average / os.cpus().length
                     embed
                     .setTitle("BIA - Processor")
-                    .addFields([
+                    .addFields(
                         {name: "Name of processor", value: os.cpus()[0].model, inline: true},
                         {name: "Cores of processor", value: os.cpus().length + " cores", inline: true},
                         {name: "Clock Avergarde", value: average + " MHz", inline: true},
-                    ])
+                    )
                     
                     receiving.reply({embeds: [embed]}).catch(err =>{})
                 break;
                 case("versions"):
                     embed
                     .setTitle("BIA - Versions")
-                    .addFields([
+                    .addFields(
                         {name: "Version of Node.js", value: process.version, inline: true},
                         {name: "Version of Discord.js", value: Discord.version, inline: true},
-                    ])
+                    )
                     receiving.reply({embeds: [embed]}).catch(err =>{})
                 break;
                 case("guildsize"):
                     embed
                     .setTitle("BIA - GuildSize")
-                    .addFields([
+                    .addFields(
                         {name: "Guild count", value: `${bot.guilds.length}`, inline: true},
                         {name: "Users count", value: `${bot.guilds.map(g => g.membercount).reduce((a, b) => (a + b))}`, inline: true},
-                    ])
+                    )
                     receiving.reply({embeds: [embed]}).catch(err =>{})
                 break;
                 case("uptime"):
                     embed
                     .setTitle("BIA - Uptime")
-                    .addFields([
+                    .addFields(
                         {name: "Uptime", value: def, inline: true},
-                    ])
+                    )
                     receiving.reply({embeds: [embed]}).catch(err =>{})
                 break;
                 default:
@@ -86,7 +86,7 @@ module.exports = {
                     average = average / os.cpus().length
                     embed
                     .setTitle("Advanced informations about the bot")
-                    .addFields([
+                    .addFields(
                         {name: "Name", value: "\`\`\`" + bot.user.username + "\`\`\`", inline: true},
                         {name: "Id", value: "\`\`\`" + bot.user.id + "\`\`\`", inline: true},
                         {name: "Name of processor", value: "```" + os.cpus()[0].model + "```", inline: true},
@@ -105,7 +105,7 @@ module.exports = {
                         {name: "Uptime", value: `\`\`\`${def}\`\`\``, inline: true},
                         {name: "\u200b", value: "\u200b", inline: true},
                         {name: "\u200b", value: "\u200b", inline: true},
-                    ])
+                    )
                     .setColor("RED")
     
                     receiving.reply({embeds: [embed]}).catch(err =>{})

@@ -16,7 +16,7 @@ module.exports = {
         const Modal = new Discord.Form()
         .setCustomID("Modal Feedback")
         .setTitle("Feedback")
-        .AddTextInputs([TextInput])
+        .AddTextInputs(TextInput)
 
         receiving.reply({modal: Modal}).catch(err => {})
 

@@ -11,7 +11,7 @@ module.exports = {
         
         let embed = new Discord.Embed()
             .setTitle(Langue["bot_s1"])
-            .addFields([
+            .addFields(
                 {name: Langue["Nom"], value: bot.user.username, inline: true},
                 {name: Langue["ID"], value: bot.user.id, inline: true},
                 {name: "\u200b", value: "\u200b", inline: false},
@@ -25,7 +25,7 @@ module.exports = {
                 {name: Langue["Sécurité"], value: Langue["SCT1"], inline: true},
                 {name: "\u200b", value: "\u200b", inline: false},
                 {name: Langue["Darkness"], value: Langue["Darkness1"], inline: true}
-            ])
+            )
             .setFooterText(`${bot.user.tag}` + " - KamKam#6168")
             .setFooterIconURL(bot.user.avatarURL)
             .setThumbnail(bot.user.avatarURL)
