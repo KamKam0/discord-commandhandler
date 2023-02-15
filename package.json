@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/KamKam0/commandhandler.git"
+    "url": "https://github.com/KamKam0/discord-commandhandler.git"
   },
   "bugs": {
-    "url": "https://github.com/KamKam0/commandhandler/issues"
+    "url": "https://github.com/KamKam0/discord-commandhandler/issues"
   },
   "keywords": ["Discordjs", "Commands", "Handler"],
-  "homepage": "https://github.com/KamKam0/commandhandler",
+  "homepage": "https://github.com/KamKam0/discord-commandhandler",
   "author": "KamKam <kamkam.dev.contact@gmail.com>",
   "license": "BSD 2",
   "dependencies": {
