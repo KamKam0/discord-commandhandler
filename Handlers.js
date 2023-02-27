@@ -96,7 +96,7 @@ class Handlers{
         return commands
     }
 
-    async Analyse(bot, receiving, Langue, cooldown){
+    async Analyse(bot, receiving){
         let type_s = await bot.__userStatus(receiving.user_id)
         let name;
         let command;
@@ -115,6 +115,7 @@ class Handlers{
             if(type_s.value === 0) command = this.GetCommand_fi(discordCommandOriginal.name)
         }
         
+        let Langue = this.#findLangue(bot, receiving)
         let languageSystem = this.langues.find(lan => lan.Langue_Code === Langue.Langue_Code) || this.langues.find(lan => lan.Langue_Code === "en-US")
 
         if(command){
@@ -124,7 +125,7 @@ class Handlers{
             if(!receiving.guild_id && !djscmd.dm_permission) return receiving.reply({content: languageSystem['la_326'], ephemeral: true}).catch(err => {})
             
             if(receiving.user_id !== bot.config.general["ID createur"] && command.help.cooldown){
-                if(cooldown && cooldown.global) if(bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, [])) return bot.warn_se(languageSystem["cold_err3"].replace("00", bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, []).GetTime()), receiving).catch(err => {})
+                if(bot.cooldown && bot.cooldown.GetCooldown("global")) if(bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, [])) return bot.warn_se(languageSystem["cold_err3"].replace("00", bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, []).GetTime()), receiving).catch(err => {})
                 if(bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}])){
                     
                     if(bot.cooldown.GetCooldown("verif").GetUser(receiving.user_id, [{command: command.name}])) return
@@ -133,7 +134,7 @@ class Handlers{
                     return bot.warn_se(languageSystem["cold_err"].replace("00", bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}]).GetTime()), receiving).catch(err => {})
                 }
                 
-                if(cooldown && cooldown.global) bot.cooldown.GetCooldown("global").AddUser({id: receiving.user_id, time: 10})
+                if(bot.cooldown && bot.cooldown.GetCooldown("global")) bot.cooldown.GetCooldown("global").AddUser({id: receiving.user_id, time: 10})
                 bot.cooldown.GetCooldown("commands").AddUser({id: receiving.user_id, properties: [{command: command.name}], time: Number(command.help.cooldown)})
             }
 
@@ -148,6 +149,19 @@ class Handlers{
             receiving.info(languageSystem["Int_err"]).catch(err => {})
             return
         }
+    }
+
+    async #findLangue(bot, receiving){
+        let Langue;
+        if(receiving.guild_id){
+            let datasGuild = (await bot.sql.select("general", {ID: receiving.guild_id}))?.[0]
+            if(datasGuild) Langue = bot.langues.map(lan => lan.Langue_Code === datasGuild.Language)
+            else Langue = bot.langues.find(lan => lan.Langue_Code === bot.config.language)
+        }else if (receiving.typee === "slash"){
+            Langue = bot.langues.find(lan => lan.Langue_Code === receiving.locale)
+            if(!Langue) bot.langues.find(lan => lan.Langue_Code === bot.config.language)
+        }else Langue = bot.langues.find(lan => lan.Langue_Code === bot.config.language)
+        return Langue
     }
 }
 
