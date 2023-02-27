@@ -1,6 +1,6 @@
 {
   "name": "@kamkam1_0/discord-commandhandler",
-  "version": "1.5.14",
+  "version": "1.6.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,6 @@
   "author": "KamKam <kamkam.dev.contact@gmail.com>",
   "license": "BSD 2",
   "dependencies": {
-    "fs": "^0.0.1-security",
     "@kamkam1_0/discord.js": "^3.3.9",
     "@kamkam1_0/discord-eventhandler": "^1.1.6"
   }

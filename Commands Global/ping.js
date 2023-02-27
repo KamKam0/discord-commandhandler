@@ -14,6 +14,6 @@ module.exports = {
 module.exports.help = {
     autorisation: "Aucune",
     cooldown: 2,
-    type: "Server & PV",
+    dm: true,
     langues: require("../Utils/getLangues")()
 }

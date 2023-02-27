@@ -36,7 +36,7 @@ module.exports = {
 }
 
 module.exports.help = {
-    type: "Server and PV",
+    dm: true,
     cooldown: 2,
     langues: require("../Utils/getLangues")()
 }

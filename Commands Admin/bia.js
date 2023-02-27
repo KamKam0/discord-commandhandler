@@ -1,7 +1,7 @@
 module.exports = {
     async execute(bot, receiving){
         const Discord = require("@kamkam1_0/discord.js")
-        const os = require("os")
+        const os = require("node:os")
         let embed = new Discord.Embed()
         .setColor("RED")
 

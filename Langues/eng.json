@@ -98,5 +98,11 @@
     "Language": "Language",
     "la_3": "The bot language is now English",
     "Pong": "Pong",
-    "Latence Message": "Message latency"
+    "Latence Message": "Message latency",
+    "la_239": "This command is only available in DM",
+    "la_326": "This command is only available in servers",
+    "cold_err": "00 remains before you can execute this command again",
+    "Int_err": "This command does not exist anymore !",
+    "dm": "dm",
+    "server": "server"
 }

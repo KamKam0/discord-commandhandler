@@ -100,5 +100,11 @@
     "Language": "Language",
     "la_3": "La Langue du bot est bien française à présent",
     "Pong": "Pong",
-    "Latence Message": "Latence Message"
+    "Latence Message": "Latence Message",
+    "la_239": "Cette commande est seulement disponible en Message Privé",
+    "la_326": "Cette commande est seulement disponible dans les serveurs",
+    "cold_err": "Il reste 00 avant que vous puissiez refaire cette commande",
+    "Int_err": "Cette commande n'existe plus actuellement !",
+    "dm": "message privé",
+    "server": "serveur"
 }

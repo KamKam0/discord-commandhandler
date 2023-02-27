@@ -51,7 +51,7 @@ class Handlers{
 
     Deploy(){
         if((/(EcoleDirecte|Pronote)/gm).test(this.bot_name)) this.AddHandler("Vip", "VIP")
-        const fs = require("fs")
+        const fs = require("node:fs")
         if(fs.readdirSync(`${process.cwd()}`).includes("Handler")) if(fs.readdirSync(`${process.cwd()}/Handler`).filter(e => !["Systeme", "Events", "Admin", "Process", ".DS_Store"].includes(e)[0])) fs.readdirSync(`${process.cwd()}/Handler`).filter(e => !["Systeme", "Events", "VIP", "Admin", "Process", ".DS_Store"].includes(e)).forEach(dir => {
             if(!this.GetHandler(dir)) this.AddHandler(dir, "User")
             fs.readdirSync(`${process.cwd()}/Handler/${dir}`).filter(e => e!==".DS_Store").forEach(command => {
@@ -100,52 +100,52 @@ class Handlers{
         let type_s = await bot.__userStatus(receiving.user_id)
         let name;
         let command;
+
         if(receiving.typee === "message") name = receiving.content.split(bot.user.id)[1].slice(1).split(" ").filter(e => e !== "")[0]
         else if(receiving.typee === "slash") name = receiving.data.name
 
         if(name === undefined) return
+
+        let discordCommandOriginal = bot.commands.find(cmd => cmd.name === name || Object.values(cmd.name_localizations).includes(name))
         
-        if(type_s.value === 4 || type_s.value === 3) command = this.GetCommand(name)
-        if(type_s.value === 1) command = this.GetCommand_fi(name) || this.GetHandler("VIP").GetCommand(name)
-        if(type_s.value === 2) command = this.GetCommand_fi(name) || this.GetHandler("Admin").GetCommand(name)
-        if(type_s.value === 0) command = this.GetCommand_fi(name)
+        if(discordCommandOriginal){
+            if(type_s.value === 4 || type_s.value === 3) command = this.GetCommand(discordCommandOriginal.name)
+            if(type_s.value === 1) command = this.GetCommand_fi(discordCommandOriginal.name) || this.GetHandler("VIP").GetCommand(discordCommandOriginal.name)
+            if(type_s.value === 2) command = this.GetCommand_fi(discordCommandOriginal.name) || this.GetHandler("Admin").GetCommand(discordCommandOriginal.name)
+            if(type_s.value === 0) command = this.GetCommand_fi(discordCommandOriginal.name)
+        }
+        
+        let languageSystem = this.langues.find(lan => lan.Langue_Code === Langue.Langue_Code) || this.langues.find(lan => lan.Langue_Code === "en-US")
 
         if(command){
-            if(!receiving.guild_id){
-                if(command.help.type){
-                    if(!command.help.type.includes("PV")){
-                        if(receiving.typee === "slash") receiving.reply({content: Langue["la_326"], ephemeral: true}).catch(err => {})
-                        return
-                    }
-                }else{
-                    if(receiving.typee === "slash") receiving.reply({content: Langue["la_326"], ephemeral: true}).catch(err => {})
-                    return
-                }
-            }
 
+            let djscmd = bot.commands.find(cmd => cmd.name === command.name)
+            if(receiving.guild_id && djscmd.onlydm) return receiving.reply({content: languageSystem["la_326"], ephemeral: true}).catch(err => {})
+            if(!receiving.guild_id && !djscmd.dm_permission) return receiving.reply({content: languageSystem['la_326'], ephemeral: true}).catch(err => {})
+            
             if(receiving.user_id !== bot.config.general["ID createur"] && command.help.cooldown){
-                if(cooldown && cooldown.global) if(bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, [])) return bot.warn_se(Langue["cold_err3"].replace("00", bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, []).GetTime()), receiving).catch(err => {})
+                if(cooldown && cooldown.global) if(bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, [])) return bot.warn_se(languageSystem["cold_err3"].replace("00", bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, []).GetTime()), receiving).catch(err => {})
                 if(bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}])){
                     
                     if(bot.cooldown.GetCooldown("verif").GetUser(receiving.user_id, [{command: command.name}])) return
                     
                     bot.cooldown.GetCooldown("verif").AddUser({id: receiving.user_id, properties: [{command: command.name}], time: bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}]).GetTime()})
-                    return bot.warn_se(Langue["cold_err"].replace("00", bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}]).GetTime()), receiving).catch(err => {})
+                    return bot.warn_se(languageSystem["cold_err"].replace("00", bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}]).GetTime()), receiving).catch(err => {})
                 }
                 
                 if(cooldown && cooldown.global) bot.cooldown.GetCooldown("global").AddUser({id: receiving.user_id, time: 10})
                 bot.cooldown.GetCooldown("commands").AddUser({id: receiving.user_id, properties: [{command: command.name}], time: Number(command.help.cooldown)})
             }
 
-            if(command.help.langues && command.help.langues[0] && command.help.langues.find(la => la.Langue_Code === Langue.Langue_Code)) Langue = command.help.langues.find(la => la.Langue_Code === Langue.Langue_Code)
+            if(command.name === "help") command.execute(bot, receiving, Langue, command.help.langues.find(la => la.Langue_Code === Langue.Langue_Code))
+            else if(command.help.langues && command.help.langues[0] && command.help.langues.find(la => la.Langue_Code === Langue.Langue_Code)) Langue = command.help.langues.find(la => la.Langue_Code === Langue.Langue_Code)
             
-            if(command.name === "help") command.execute(bot, receiving, Langue, bot.langues.find(la => la.Langue_Code === Langue.Langue_Code))
-            else command.execute(bot, receiving, Langue)
+            if(command.name !== "help") command.execute(bot, receiving, Langue)
         }
 
         if(!command && receiving.typee === "slash"){
-            bot.DeleteSlashCommand(bot.user.id, receiving);
-            receiving.info(Langue["Int_err"]).catch(err => {})
+            bot.commands.delete(bot.user.id, receiving);
+            receiving.info(languageSystem["Int_err"]).catch(err => {})
             return
         }
     }

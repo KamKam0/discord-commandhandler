@@ -1,8 +1,8 @@
 module.exports = () => {
-    const fs = require("fs")
+    const fs = require("node:fs")
     let symbol;
-    if(require("os").platform() === "darwin") symbol = "/"
-    if(require("os").platform() === "win32") symbol = "\\"
+    if(require("node:os").platform() === "darwin") symbol = "/"
+    if(require("node:os").platform() === "win32") symbol = "\\"
     let path = require.resolve("../Langues/eng.json").split(symbol)
     path.pop()
     path = path.join(symbol)
