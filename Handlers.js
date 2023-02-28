@@ -137,8 +137,8 @@ class Handlers{
                 bot.cooldown.GetCooldown("commands").AddUser({id: receiving.user_id, properties: [{command: command.name}], time: Number(command.help.cooldown)})
             }
 
-            if(command.name === "help") command.execute(bot, receiving, Langue, command.help.langues.find(la => la.Langue_Code === Langue.Langue_Code))
-            else if(command.help.langues && command.help.langues[0] && command.help.langues.find(la => la.Langue_Code === Langue.Langue_Code)) Langue = command.help.langues.find(la => la.Langue_Code === Langue.Langue_Code)
+            if(command.name === "help") command.execute(bot, receiving, Langue, command.help.langues.find(la => la.Langue_Code === languageSystem.Langue_Code))
+            else if(command.help.langues && command.help.langues[0]) Langue = command.help.langues.find(la => la.Langue_Code === languageSystem.Langue_Code)
             
             if(command.name !== "help") command.execute(bot, receiving, Langue)
         }
