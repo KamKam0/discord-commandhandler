@@ -6,6 +6,8 @@ class Command{
         this.handler = handler
         this.name = name
         this.names = this.getNames(langues)
+        this.onlydm = false
+        this.dm_permission = this.#handledms(datas?.help?.dm)
         this.nsfw = datas.help.nsfw ? datas.help.nsfw : false
     }
 
@@ -17,6 +19,18 @@ class Command{
         })
 
         return nas
+    }
+
+    #handledms(state){
+        switch(state){
+            case(null):
+                this.onlydm = true
+                return true
+            case(true):
+                return true
+            default:
+                return false
+        }
     }
 }
 

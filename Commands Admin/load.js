@@ -23,7 +23,7 @@ module.exports = {
     }
 }
 module.exports.help = {
-    type: "Server and PV",
+    dm: true,
     autorisation: "createur",
     langues: require("../Utils/getLangues")()
 }

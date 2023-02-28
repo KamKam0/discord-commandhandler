@@ -30,7 +30,7 @@ module.exports = {
 
 module.exports.help = {
     name: "kill",
-    type: "Server and PV",
+    dm: true,
     autorisation: "Creator",
     langues: require("../Utils/getLangues")()
 }

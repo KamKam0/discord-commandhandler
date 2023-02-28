@@ -3,6 +3,7 @@ class Handlers{
     constructor(name, langues){
         this.names = []
         this.langues = langues
+        this.systemLanguages = require("./Utils/getLangues")()
         this.handlers = this.AutomaticAdd()
         this.bot_name = name
     }
@@ -107,22 +108,20 @@ class Handlers{
         if(name === undefined) return
 
         let discordCommandOriginal = bot.commands.find(cmd => cmd.name === name || Object.values(cmd.name_localizations).includes(name))
-        
-        if(discordCommandOriginal){
-            if(type_s.value === 4 || type_s.value === 3) command = this.GetCommand(discordCommandOriginal.name)
-            if(type_s.value === 1) command = this.GetCommand_fi(discordCommandOriginal.name) || this.GetHandler("VIP").GetCommand(discordCommandOriginal.name)
-            if(type_s.value === 2) command = this.GetCommand_fi(discordCommandOriginal.name) || this.GetHandler("Admin").GetCommand(discordCommandOriginal.name)
-            if(type_s.value === 0) command = this.GetCommand_fi(discordCommandOriginal.name)
+
+        if(discordCommandOriginal || receiving.typee === "message"){
+            if(type_s.value === 4 || type_s.value === 3) command = this.GetCommand(discordCommandOriginal?.name || name)
+            if(type_s.value === 1) command = this.GetCommand_fi(discordCommandOriginal?.name || name) || this.GetHandler("VIP").GetCommand(discordCommandOriginal?.name || name)
+            if(type_s.value === 2) command = this.GetCommand_fi(discordCommandOriginal?.name || name) || this.GetHandler("Admin").GetCommand(discordCommandOriginal?.name || name)
+            if(type_s.value === 0) command = this.GetCommand_fi(discordCommandOriginal?.name || name)
         }
         
-        let Langue = this.#findLangue(bot, receiving)
-        let languageSystem = this.langues.find(lan => lan.Langue_Code === Langue.Langue_Code) || this.langues.find(lan => lan.Langue_Code === "en-US")
+        let Langue = await this.#findLangue(bot, receiving)
+        let languageSystem = this.systemLanguages.find(lan => lan.Langue_Code === Langue.Langue_Code) || this.systemLanguages.find(lan => lan.Langue_Code === bot.config.general.language) || this.systemLanguages.find(lan => lan.Langue_Code === "en-US")
 
         if(command){
-
-            let djscmd = bot.commands.find(cmd => cmd.name === command.name)
-            if(receiving.guild_id && djscmd.onlydm) return receiving.reply({content: languageSystem["la_326"], ephemeral: true}).catch(err => {})
-            if(!receiving.guild_id && !djscmd.dm_permission) return receiving.reply({content: languageSystem['la_326'], ephemeral: true}).catch(err => {})
+            if(receiving.guild_id && command.onlydm) return receiving.reply({content: languageSystem["la_239"], ephemeral: true}).catch(err => {})
+            if(!receiving.guild_id && !command.dm_permission) return receiving.reply({content: languageSystem['la_326'], ephemeral: true}).catch(err => {})
             
             if(receiving.user_id !== bot.config.general["ID createur"] && command.help.cooldown){
                 if(bot.cooldown && bot.cooldown.GetCooldown("global")) if(bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, [])) return bot.warn_se(languageSystem["cold_err3"].replace("00", bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, []).GetTime()), receiving).catch(err => {})
@@ -155,12 +154,12 @@ class Handlers{
         let Langue;
         if(receiving.guild_id){
             let datasGuild = (await bot.sql.select("general", {ID: receiving.guild_id}))?.[0]
-            if(datasGuild) Langue = bot.langues.map(lan => lan.Langue_Code === datasGuild.Language)
-            else Langue = bot.langues.find(lan => lan.Langue_Code === bot.config.language)
+            if(datasGuild) Langue = bot.langues.find(lan => lan.Langue_Code === datasGuild.Language)
+            else Langue = bot.langues.find(lan => lan.Langue_Code === bot.config.general.language)
         }else if (receiving.typee === "slash"){
             Langue = bot.langues.find(lan => lan.Langue_Code === receiving.locale)
-            if(!Langue) bot.langues.find(lan => lan.Langue_Code === bot.config.language)
-        }else Langue = bot.langues.find(lan => lan.Langue_Code === bot.config.language)
+            if(!Langue) bot.langues.find(lan => lan.Langue_Code === bot.config.general.language)
+        }else Langue = bot.langues.find(lan => lan.Langue_Code === bot.config.general.language)
         return Langue
     }
 }

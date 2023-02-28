@@ -118,7 +118,7 @@ module.exports = {
 
 module.exports.help = {
     name: "bia",
-    type: "Server and PV",
+    dm: true,
     autorisation: "Be an admnistrator",
     langues: require("../Utils/getLangues")()
 }
