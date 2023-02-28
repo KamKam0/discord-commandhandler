@@ -152,11 +152,11 @@ class Handlers{
 
     async #findLangue(bot, receiving){
         let Langue;
-        if(receiving.guild_id){
-            let datasGuild = (await bot.sql.select("general", {ID: receiving.guild_id}))?.[0]
+        if(receiving?.guild_id){
+            let datasGuild = (await bot.sql.select("general", {ID: receiving.guild_id}).catch(err => {}))?.[0]
             if(datasGuild) Langue = bot.langues.find(lan => lan.Langue_Code === datasGuild.Language)
             else Langue = bot.langues.find(lan => lan.Langue_Code === bot.config.general.language)
-        }else if (receiving.typee === "slash"){
+        }else if (receiving?.typee === "slash"){
             Langue = bot.langues.find(lan => lan.Langue_Code === receiving.locale)
             if(!Langue) bot.langues.find(lan => lan.Langue_Code === bot.config.general.language)
         }else Langue = bot.langues.find(lan => lan.Langue_Code === bot.config.general.language)

@@ -39,7 +39,7 @@ class Handler{
     Init(){
         if(this.name === "Admin" || this.name === "Global"){
             let liste;
-            if(this.name === "Admin") liste = ["admin.js", "bia.js", "kill.js", "vip.js"]
+            if(this.name === "Admin") liste = ["bia.js", "kill.js", "load.js"]
             if(this.name === "Global") liste = ["botinfo.js", "feedback.js", "help.js", "invite.js", "language.js", "ping.js"]
             let base = []
             liste.forEach(dir => {
