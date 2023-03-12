@@ -161,6 +161,7 @@ class Handlers{
                 Langue = bot.langues.find(lan => lan.Langue_Code === receiving.locale)
                 if(!Langue) bot.langues.find(lan => lan.Langue_Code === bot.config.general.language)
             }else Langue = bot.langues.find(lan => lan.Langue_Code === bot.config.general.language)
+            if(!Langue) Langue = bot.langues.find(lan => lan.Langue_Code === bot.config.general.language)
             return resolve(Langue)
         })
     }
