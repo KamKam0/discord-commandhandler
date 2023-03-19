@@ -81,7 +81,7 @@ function base_protocole(bot, embed, type_s, Langue, receiving, Langue2){
     let dirs_t = bot.handler.GetHandler(bot.handler.names.find(e => e.toLowerCase() === toadd.find(e => e.position === 0).name.toLowerCase())).GetCommands()
 
     embed
-    .setTitle(`${Langue["Aide"]} ${toadd.find(e => e.position === 0).name}`)
+    .setTitle(`${Langue2["Aide"]} ${toadd.find(e => e.position === 0).name}`)
     .setFooterText(`${toadd.map(ha => `${ha.name} -> ${Number(ha.position)+1}/${Math.max(...toadd.map(ha => Number(ha.position)+1))}`).join("\n")}`)
     .setColor("BLUE")
     dirs_t.forEach(command => {
@@ -141,7 +141,7 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
         let name = positions.find(h => h.current).name
 
         let embed = new Discord.Embed()
-        .setTitle(`${Langue["Aide"]} ${name}`)
+        .setTitle(`${Langue2["Aide"]} ${name}`)
         .setColor("BLUE")
         .setFooterText(da.message.embeds[0].footer.text)
 
@@ -153,11 +153,11 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
         })
 
         da.message.modify({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
-        da.reply({ephemeral: true, content: Langue["h_2"]}).then(() => {
+        da.reply({ephemeral: true, content: Langue2["h_2"]}).then(() => {
             setTimeout(() => {
                 da.deletereply().catch(err => {})
             }, 3 * 1000)
-        }).catch(err => {})
+        }).catch(err => {console.log(err)})
     })
 }
 
