@@ -2,7 +2,7 @@ module.exports = {
     async execute(bot , receiving, Langue){
         const Discord = require("@kamkam1_0/discord.js")
 
-        if(receiving.typee === "message") return receiving.error("Pour exécuter la commande feedback, vous devez passer pour la commande slash")
+        if(receiving.receivingType === "message") return receiving.error("Pour exécuter la commande feedback, vous devez passer pour la commande slash")
 
         const TextInput = new Discord.TextInput()
         .setCustomID("Feedback_content")
@@ -53,5 +53,5 @@ module.exports.help = {
     dm: true,
     autorisation: "AUCUNE",
     cooldown: 86400,
-    langues: require("../Utils/getLangues")()
+    langues: require("../utils/getLangues")()
 }

@@ -7,16 +7,16 @@ module.exports = {
 
         if(!["unload", "reload"].includes(method)) return receiving.error("La méthode n'est pas correcte (unload, reload)")
 
-        let cmd = bot.handler.GetCommand(pcmd)
+        let cmd = bot.handler.getCommand(pcmd)
 
         if(!cmd) return receiving.error("La commande n'a pas été trouvée")
 
         let path = cmd.path
 
-        if(method === "unload") bot.handler.GetHandler(cmd.handler).RemoveCommand(cmd.name)
+        if(method === "unload") bot.handler.getHandler(cmd.handler).removeCommand(cmd.name)
         if(method === "reload") {
-            bot.handler.GetHandler(cmd.handler).RemoveCommand(cmd.name)
-            bot.handler.GetHandler(cmd.handler).AddCommand(cmd.name, require(path), path, cmd.handler)
+            bot.handler.getHandler(cmd.handler).removeCommand(cmd.name)
+            bot.handler.getHandler(cmd.handler).addCommand(cmd.name, require(path), path, cmd.handler)
         }
 
         receiving.success(`La commande a bien été ${method}`)
@@ -25,5 +25,5 @@ module.exports = {
 module.exports.help = {
     dm: true,
     autorisation: "createur",
-    langues: require("../Utils/getLangues")()
+    langues: require("../utils/getLangues")()
 }

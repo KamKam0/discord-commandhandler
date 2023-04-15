@@ -15,10 +15,10 @@ module.exports = {
         else def =  `${time} seconde(s)`
         let type
     
-            if(receiving.typee === "slash"){
+            if(receiving.receivingType === "interaction"){
                 type = receiving.data.options.find(int => int.name === "1") ? receiving.data.options.find(int => int.name === "1").value: undefined
             }
-            if(receiving.typee === "message"){
+            if(receiving.receivingType === "message"){
                 type = receiving.content.split(" ")[2]
             }
     
@@ -120,5 +120,5 @@ module.exports.help = {
     name: "bia",
     dm: true,
     autorisation: "Be an admnistrator",
-    langues: require("../Utils/getLangues")()
+    langues: require("../utils/getLangues")()
 }

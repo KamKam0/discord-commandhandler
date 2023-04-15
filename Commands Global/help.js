@@ -3,26 +3,26 @@ module.exports = {
         const Discord = require("@kamkam1_0/discord.js")
         let precision;
         
-        if(receiving.typee === "slash") precision =  receiving.data.options ? receiving.data.options[0].value: undefined
-        if(receiving.typee === "message") precision = receiving.content.split(" ")[2]
+        if(receiving.receivingType === "interaction") precision =  receiving.data.options ? receiving.data.options[0].value: undefined
+        if(receiving.receivingType === "message") precision = receiving.content.split(" ")[2]
 
         let embed = new Discord.Embed()
         .setColor("PURPLE")
 
         let VID = receiving.user.id
-        let type_s = await bot.__userStatus(VID)
+        let type_s = await bot._userStatus(VID)
 
         if(precision){
             let commandt;
                     
-            if(type_s.value === 4 || type_s.value === 3) commandt = bot.handler.GetCommand(precision)
-            if(type_s.value === 1) commandt = bot.handler.GetCommand_fi(precision) || bot.handler.GetHandler("VIP").GetCommand(precision)
-            if(type_s.value === 2) commandt = bot.handler.GetCommand_fi(precision) || bot.handler.GetHandler("Admin").GetCommand(precision)
-            if(type_s.value === 0) commandt = bot.handler.GetCommand_fi(precision)
+            if(type_s.value === 4 || type_s.value === 3) commandt = bot.handler.getCommand(precision)
+            if(type_s.value === 1) commandt = bot.handler.getCommandfi(precision) || bot.handler.getHandler("VIP").getCommand(precision)
+            if(type_s.value === 2) commandt = bot.handler.getCommandfi(precision) || bot.handler.getHandler("Admin").getCommand(precision)
+            if(type_s.value === 0) commandt = bot.handler.getCommandfi(precision)
 
             if(commandt){
                 if(commandt.help.nsfw && type_s.value !== 4) return base_protocole(bot, embed, type_s, Langue, receiving, Langue2)
-                let commandLanguage = commandt.help.langues?.find(lan => lan.Langue_Code === Langue.Langue_Code) || commandt.help?.langues.find(lan => lan.Langue_Code === "en-US") || Langue
+                let commandLanguage = commandt.help.langues?.find(lan => lan.languageCode === Langue.languageCode) || commandt.help.langues?.find(lan => lan.languageCode === "en-US") || Langue
                 
                 let p;
                 switch(commandt.help.dm){
@@ -78,7 +78,7 @@ function base_protocole(bot, embed, type_s, Langue, receiving, Langue2){
     toadd = toadd.map((name, acc) => {
         return {position: acc, name: name}
     })
-    let dirs_t = bot.handler.GetHandler(bot.handler.names.find(e => e.toLowerCase() === toadd.find(e => e.position === 0).name.toLowerCase())).GetCommands()
+    let dirs_t = bot.handler.getHandler(bot.handler.names.find(e => e.toLowerCase() === toadd.find(e => e.position === 0).name.toLowerCase())).getCommands()
 
     embed
     .setTitle(`${Langue2["Aide"]} ${toadd.find(e => e.position === 0).name}`)
@@ -87,7 +87,7 @@ function base_protocole(bot, embed, type_s, Langue, receiving, Langue2){
     dirs_t.forEach(command => {
         if(!command.help.langues) embed.addField(command.name, Langue["Help"][`${command.name}_description`])
         else{
-            let systemLanguage = command.help.langues?.find(lan => lan.Langue_Code === Langue.Langue_Code) || command.help.langues?.find(lan => lan.Langue_Code === "en-US") || Langue
+            let systemLanguage = command.help.langues?.find(lan => lan.languageCode === Langue.languageCode) || command.help.langues?.find(lan => lan.languageCode === "en-US") || Langue
             embed.addField(command.name, systemLanguage["Help"][`${command.name}_description`])
         }
         if(embed.fields.length === 25 || embed.fields.length === dirs_t.length) send_protocole(bot, embed, receiving, Langue, Langue2)
@@ -107,8 +107,8 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
     let msg = await receiving.reply({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
     let collector = bot.collectInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 3*1000, id: ["help_right", "help_left"], user_id: receiving.user_id})
     collector.once("end", () => {
-        if(receiving.typee === "slash") receiving.deletereply()
-        if(receiving.typee === "message") msg.delete()
+        if(receiving.receivingType === "interaction") receiving.deletereply()
+        if(receiving.receivingType === "message") msg.delete()
     })
     collector.on("collecting", (bo, da) => {
         let buttonleft = new Discord.Button()
@@ -145,10 +145,10 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
         .setColor("BLUE")
         .setFooterText(da.message.embeds[0].footer.text)
 
-        let dirs_t = bo.handler.GetHandler(bo.handler.names.find(e => e.toLowerCase() === name.toLowerCase())).GetCommands()
+        let dirs_t = bo.handler.getHandler(bo.handler.names.find(e => e.toLowerCase() === name.toLowerCase())).getCommands()
 
         dirs_t.forEach(command => {
-            let systemLanguage = command.help.langues?.find(lan => lan.Langue_Code === Langue.Langue_Code) || command.help.langues?.find(lan => lan.Langue_Code === "en-US") || Langue
+            let systemLanguage = command.help.langues?.find(lan => lan.languageCode === Langue.languageCode) || command.help.langues?.find(lan => lan.languageCode === "en-US") || Langue
             embed.addField(command.name, systemLanguage["Help"][`${command.name.split(".")[0]}_description`])
         })
 
@@ -185,5 +185,5 @@ module.exports.help = {
           type: 3
         }
     ],
-    langues: require("../Utils/getLangues")()
+    langues: require("../utils/getLangues")()
 }
