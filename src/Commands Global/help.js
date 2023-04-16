@@ -104,22 +104,16 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
     .setCustomID("help_right")
     .setStyle("Secondary")
     .setEmoji("▶️")
-    let msg = await receiving.reply({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
-    let collector = bot.collectInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 3*1000, id: ["help_right", "help_left"], user_id: receiving.user_id})
+    let msg = await receiving.reply({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => {})
+    if(receiving.receivingType === "interaction"){
+        msg = await receiving.getOriginalResponse()
+    }
+    let collector = bot.commands.collectInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 3*1000, id: ["help_right", "help_left"], user_id: receiving.user_id})
     collector.once("end", () => {
         if(receiving.receivingType === "interaction") receiving.deletereply()
         if(receiving.receivingType === "message") msg.delete()
     })
     collector.on("collecting", (bo, da) => {
-        let buttonleft = new Discord.Button()
-        .setCustomID("help_left")
-        .setStyle("Secondary")
-        .setEmoji("◀️")
-        let buttonright = new Discord.Button()
-        .setCustomID("help_right")
-        .setStyle("Secondary")
-        .setEmoji("▶️")
-
         let positions = da.message.embeds[0].footer.text.split("\n").map(text => {
             return {position: Number(text.split("->")[1].split("/")[0].trim()) - 1, name: text.split("->")[0].trim(), current: da.message.embeds[0].title.split(" ")[1].trim() === text.split("->")[0].trim() ? true : false}
         })
@@ -151,8 +145,9 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
             let systemLanguage = command.help.langues?.find(lan => lan.languageCode === Langue.languageCode) || command.help.langues?.find(lan => lan.languageCode === "en-US") || Langue
             embed.addField(command.name, systemLanguage["commands"][`${command.name.split(".")[0]}_description`])
         })
-
+        
         da.message.modify({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
+        
         da.reply({ephemeral: true, content: Langue2["h_2"]}).then(() => {
             setTimeout(() => {
                 da.deletereply().catch(err => {})
