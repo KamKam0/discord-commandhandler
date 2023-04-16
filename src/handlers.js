@@ -114,13 +114,12 @@ class Handlers{
         if(type_s.value === 1) command = this.getCommandfi(name) || this.getHandler("VIP").getCommand(name)
         if(type_s.value === 2) command = this.getCommandfi(name) || this.getHandler("Admin").getCommand(name)
         if(type_s.value === 0) command = this.getCommandfi(name)
-
-        if(command.help.message === false && receiving.receivingType === "message") return
         
         let Langue = await this.#findLangue(bot, receiving)
         let languageSystem = systemeLanguages.find(lan => lan.languageCode === Langue.languageCode) || systemeLanguages.find(lan => lan.languageCode === bot.config.general.language) || systemeLanguages.find(lan => lan.languageCode === "en-US")
 
         if(command){
+            if(command.help.message === false && receiving.receivingType === "message") return
             if(receiving.guild_id && command.onlydm) return receiving.reply({content: languageSystem["la_239"], ephemeral: true}).catch(err => {})
             if(!receiving.guild_id && !command.dm_permission) return receiving.reply({content: languageSystem['la_326'], ephemeral: true}).catch(err => {})
             
