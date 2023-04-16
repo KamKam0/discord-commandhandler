@@ -3,7 +3,7 @@ module.exports = {
         const Discord = require("@kamkam1_0/discord.js")
         let precision;
         
-        if(receiving.receivingType === "interaction") precision =  receiving.options ? receiving.options[0].value: undefined
+        if(receiving.receivingType === "interaction") precision =  receiving.options.length ? receiving.options[0].value: undefined
         if(receiving.receivingType === "message") precision = receiving.content.split(" ")[2]
 
         let embed = new Discord.Embed()
@@ -150,7 +150,7 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
         
         da.reply({ephemeral: true, content: Langue2["h_2"]}).then(() => {
             setTimeout(() => {
-                da.deletereply().catch(err => {})
+                da.deleteReply().catch(err => {})
             }, 3 * 1000)
         }).catch(err => {console.log(err)})
     })
