@@ -6,8 +6,8 @@ module.exports = {
         if(!receiving.member.hasPermission(autorisation)) return receiving.error(Langue["perm_commande"])
 
         let Language
-        if(receiving.receivingType === "interaction") Language = receiving.data.options?.find(int => int.name === "language") ? receiving.data.options.find(int => int.name === "language")?.value : undefined
-        if(receiving.receivingType === "message") Language = receiving.content ? receiving.content.split(" ")[2] : undefined
+        if(receiving.receivingType === "interaction") Language = receiving.getOption("language")?.value || null
+        if(receiving.receivingType === "message") Language = receiving.content ? receiving.content.split(" ")[2] : null
         
         let vraibdd = await bot.sql.select("general", {ID: receiving.guild.id})
         if(Language === vraibdd[0]["Language"]) return receiving.error(Langue["la_1"] + " " + Language).catch(err =>{})

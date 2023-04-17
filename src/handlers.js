@@ -130,7 +130,7 @@ class Handlers{
                     if(bot.cooldown.GetCooldown("verif").GetUser(receiving.user_id, [{command: command.name}])) return
                     
                     bot.cooldown.GetCooldown("verif").AddUser({id: receiving.user_id, properties: [{command: command.name}], time: bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}]).GetTime()})
-                    return bot.warn_se(languageSystem["cold_err"].replace("00", bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}]).GetTime()), receiving).catch(err => {})
+                    return receiving.warn(languageSystem["cold_err"].replace("00", bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}]).GetTime() + " seconds")).catch(err => {console.log(err)})
                 }
                 
                 if(bot.cooldown && bot.cooldown.GetCooldown("global")) bot.cooldown.GetCooldown("global").AddUser({id: receiving.user_id, time: 10})
