@@ -5,26 +5,26 @@ module.exports = {
         if(receiving.receivingType === "message") return receiving.error("Pour exécuter la commande feedback, vous devez passer pour la commande slash")
 
         const TextInput = new Discord.TextInput()
-        .setCustomID("Feedback_content")
+        .setCustomID("feedback_content")
         .setLabel("Contenu de votre feedback")
         .setMaxLength(1500)
         .setMinLength(20)
         .setPlaceHolder("Mettez ici le contenu de votre feedback")
         .setRequired(true)
-        .setStyle("long")
+        .setStyle("Long")
 
         const Modal = new Discord.Form()
-        .setCustomID("Modal Feedback")
+        .setCustomID("modal_feedback")
         .setTitle("Feedback")
         .AddTextInputs(TextInput)
 
         receiving.reply({modal: Modal}).catch(err => {})
 
-        bot.commands.awaitInteractions({id: "Modal Feedback", user_id: receiving.user_id, number: 1})
+        bot.commands.awaitInteractions({id: "modal_feedback", user_id: receiving.user_id, number: 1})
         .then(int => {
             if(!int[0]) return
             const Discord = require("@kamkam1_0/discord.js")
-            let feedback = int[0].components.find(e => e.components[0].custom_id === "Feedback_content").components[0].value
+            let feedback = int[0].getComponent("feedback_content").value
             let c = bot.channels.get(bot.config.general["fbackchannel"])
             if(!c){
                 int[0].error(Langue["feedback_1"]).catch(err =>{})
@@ -40,9 +40,9 @@ module.exports = {
             .addField("Contenu du feedback", feedback)
             .setColor("BLUE")
             const RespondButton = new Discord.Button()
-            .setCustomID("Response_ticket_button")
+            .setCustomID("response_ticket_button")
             .setEmoji("📥")
-            .setStyle("DANGER")
+            .setStyle("Danger")
             c.send({embeds: [embed], components: [RespondButton]}).catch(err =>{ })
             int[0].success(Langue["feedback_6"]).catch(err =>{})
         })

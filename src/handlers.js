@@ -151,19 +151,17 @@ class Handlers{
     }
 
     async #findLangue(bot, receiving){
-        return  new Promise(async (resolve, reject) => {
-            let Langue;
-            if(receiving?.guild_id){
-                let datasGuild = bot.sql ? (await bot.sql.select("general", {ID: receiving.guild_id}).catch(err => {}))?.[0] : null
-                if(datasGuild) Langue = bot.langues.find(lan => lan.languageCode === datasGuild.Language)
-                if(!Langue) Langue = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
-            }else if (receiving?.receivingType === "interaction"){
-                Langue = bot.langues.find(lan => lan.languageCode === receiving.locale)
-                if(!Langue) bot.langues.find(lan => lan.languageCode === bot.config.general.language)
-            }else Langue = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
-            if(!Langue) Langue = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
-            return resolve(Langue)
-        })
+        let LangueIntern;
+        if(receiving.guild_id){
+            let baseFoundLanguage = bot.langues.find(lan => lan.languageCode === receiving.guild.preferred_locale)
+            if(baseFoundLanguage) LangueIntern = baseFoundLanguage
+            else LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
+        }else if (receiving.typee === "slash"){
+            let baseFoundLanguage = bot.langues.find(lan => lan.languageCode === receiving.locale)
+            if(baseFoundLanguage) LangueIntern = baseFoundLanguage
+            else bot.langues.find(lan => lan.languageCode === bot.config.general.language)
+        }else LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
+        return LangueIntern
     }
 }
 
