@@ -161,7 +161,7 @@ class Handlers{
             }
 
             if(command.name === "help") command.execute(bot, receiving, Langue, languageSystem)
-            else if(command.help.langue) Langue = languageSystem
+            else if(command.help.langues) Langue = languageSystem
             
             if(command.name !== "help") command.execute(bot, receiving, Langue)
         }
@@ -182,7 +182,7 @@ class Handlers{
         }else if (receiving.receivingType === "interaction"){
             let baseFoundLanguage = bot.langues.find(lan => lan.languageCode === receiving.locale)
             if(baseFoundLanguage) LangueIntern = baseFoundLanguage
-            else bot.langues.find(lan => lan.languageCode === bot.config.general.language)
+            else LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
         }else LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
         return LangueIntern
     }
