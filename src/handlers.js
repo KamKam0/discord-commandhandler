@@ -179,7 +179,7 @@ class Handlers{
             let baseFoundLanguage = bot.langues.find(lan => lan.languageCode === receiving.guild.preferred_locale)
             if(baseFoundLanguage) LangueIntern = baseFoundLanguage
             else LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
-        }else if (receiving.typee === "slash"){
+        }else if (receiving.receivingType === "interaction"){
             let baseFoundLanguage = bot.langues.find(lan => lan.languageCode === receiving.locale)
             if(baseFoundLanguage) LangueIntern = baseFoundLanguage
             else bot.langues.find(lan => lan.languageCode === bot.config.general.language)
