@@ -6,16 +6,16 @@ module.exports = {
 
         const TextInput = new Discord.TextInput()
         .setCustomID("feedback_content")
-        .setLabel("Contenu de votre feedback")
+        .setLabel(Langue["feedbackContent"])
         .setMaxLength(1500)
         .setMinLength(20)
-        .setPlaceHolder("Mettez ici le contenu de votre feedback")
+        .setPlaceHolder(Langue["feedbackPlaceHolder"])
         .setRequired(true)
         .setStyle("Long")
 
-        const Modal = new Discord.Form()
+        const Modal = new Discord.Modal()
         .setCustomID("modal_feedback")
-        .setTitle("Feedback")
+        .setTitle(Langue["feedbackTitle"])
         .AddTextInputs(TextInput)
 
         receiving.reply({modal: Modal}).catch(err => {})
@@ -34,10 +34,10 @@ module.exports = {
             if(!feedback || String(feedback).trim().length === 0) return int[0].error(Langue["feedback_7"]).catch(err =>{})
             if(feedback.length > 1500) return int[0].error(Langue["feedback_3"]).catch(err =>{})
             let embed = new Discord.Embed()
-            .setTitle("Nouveau feedback de " + int[0].user.username)
+            .setTitle(Langue["newFeedback"] + int[0].user.username)
             .setThumbnail(int[0].user.avatarURL)
-            .setFooterText("User ID:" + " " + `${int[0].user.id}`)
-            .addField("Contenu du feedback", feedback)
+            .setFooterText(Langue["userId"] + " " + `${int[0].user.id}`)
+            .addField(Langue["feedbackContentE"], feedback)
             .setColor("BLUE")
             const RespondButton = new Discord.Button()
             .setCustomID("response_ticket_button")
@@ -53,5 +53,5 @@ module.exports.help = {
     dm: true,
     autorisation: "AUCUNE",
     cooldown: 86400,
-    langues: require("../utils/getLangues")()
+    langues: true
 }

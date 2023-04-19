@@ -38,5 +38,5 @@ module.exports = {
 module.exports.help = {
     dm: true,
     cooldown: 2,
-    langues: require("../utils/getLangues")()
+    langues: true
 }

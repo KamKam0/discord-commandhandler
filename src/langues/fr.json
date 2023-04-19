@@ -106,5 +106,11 @@
     "cold_err": "Il reste 00 avant que vous puissiez refaire cette commande",
     "Int_err": "Cette commande n'existe plus actuellement !",
     "dm": "message privé",
-    "server": "serveur"
+    "server": "serveur",
+    "feedbackContent": "Contenu de votre feedback",
+    "feedbackPlaceHolder": "Mettez ici le contenu de votre feedback",
+    "feedbackTitle": "Feedback",
+    "newFeedback": "Nouveau feedback de ",
+    "userId": "ID Utilisateur:",
+    "feedbackContentE": "Contenu du feedback"
 }

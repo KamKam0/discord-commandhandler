@@ -1,4 +1,6 @@
 const Command = require("./command")
+const fs = require("node:fs")
+
 class Handler{
     constructor(name, level, langues){
         this.name = name
@@ -20,7 +22,8 @@ class Handler{
 
     removeCommand(name){
         if(!name || typeof name !== "string") return "invalid name"
-        this.ar.splice(this.ar.indexOf(this.ar.find(e => String(e.name).toLowerCase() === String(name).toLowerCase())), 1)
+        let command = this.ar.find(e => String(e.name).toLowerCase() === String(name).toLowerCase())
+        if(command) this.ar.splice(this.ar.indexOf(command), 1)
     }
 
     getCommand(name){
@@ -39,8 +42,14 @@ class Handler{
     init(){
         if(this.name === "Admin" || this.name === "Global"){
             let liste;
-            if(this.name === "Admin") liste = ["bia.js", "kill.js", "load.js"]
-            if(this.name === "Global") liste = ["botinfo.js", "feedback.js", "help.js", "invite.js", "ping.js"]
+            if(this.name === "Admin"){
+                let path = require.resolve("./Commands Admin/kill.js")
+                liste = fs.readdirSync(path.split("kill")[0])
+            }
+            if(this.name === "Global"){
+                let path = require.resolve("./Commands Global/help.js")
+                liste = fs.readdirSync(path.split("help")[0])
+            }
             let base = []
             liste.forEach(dir => {
                 let path = `./Commands ${this.name}/${dir}`

@@ -15,5 +15,5 @@ module.exports.help = {
     autorisation: "Aucune",
     cooldown: 2,
     dm: true,
-    langues: require("../utils/getLangues")()
+    langues: true
 }

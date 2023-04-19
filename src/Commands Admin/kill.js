@@ -32,5 +32,5 @@ module.exports.help = {
     name: "kill",
     dm: true,
     autorisation: "Creator",
-    langues: require("../utils/getLangues")()
+    langues: true
 }

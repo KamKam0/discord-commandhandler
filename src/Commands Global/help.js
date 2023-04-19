@@ -87,7 +87,7 @@ function base_protocole(bot, embed, type_s, Langue, receiving, Langue2){
     dirs_t.forEach(command => {
         if(!command.help.langues) embed.addField(command.name, Langue["commands"][`${command.name}_description`])
         else{
-            let systemLanguage = command.help.langues?.find(lan => lan.languageCode === Langue.languageCode) || command.help.langues?.find(lan => lan.languageCode === "en-US") || Langue
+            let systemLanguage = bot.handler.getLanguages().find(lan => lan.languageCode === Langue.languageCode) || bot.handler.getLanguages().find(lan => lan.languageCode === "en-US") || Langue
             embed.addField(command.name, systemLanguage["commands"][`${command.name}_description`])
         }
         if(embed.fields.length === 25 || embed.fields.length === dirs_t.length) send_protocole(bot, embed, receiving, Langue, Langue2)
@@ -140,10 +140,12 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
         .setFooterText(da.message.embeds[0].footer.text)
 
         let dirs_t = bo.handler.getHandler(bo.handler.names.find(e => e.toLowerCase() === name.toLowerCase())).getCommands()
-
         dirs_t.forEach(command => {
-            let systemLanguage = command.help.langues?.find(lan => lan.languageCode === Langue.languageCode) || command.help.langues?.find(lan => lan.languageCode === "en-US") || Langue
-            embed.addField(command.name, systemLanguage["commands"][`${command.name.split(".")[0]}_description`])
+            if(!command.help.langues) embed.addField(command.name, Langue["commands"][`${command.name}_description`])
+            else{
+                let systemLanguage = bot.handler.getLanguages().find(lan => lan.languageCode === Langue.languageCode) || bot.handler.getLanguages().find(lan => lan.languageCode === "en-US") || Langue
+                embed.addField(command.name, systemLanguage["commands"][`${command.name}_description`])
+            }
         })
         
         da.message.modify({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
@@ -180,5 +182,5 @@ module.exports.help = {
           type: 3
         }
     ],
-    langues: require("../utils/getLangues")()
+    langues: true
 }

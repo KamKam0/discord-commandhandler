@@ -104,5 +104,11 @@
     "cold_err": "00 remains before you can execute this command again",
     "Int_err": "This command does not exist anymore !",
     "dm": "dm",
-    "server": "server"
+    "server": "server",
+    "feedbackContent": "Your feedback content",
+    "feedbackPlaceHolder": "Enter hehre the content of your feedback",
+    "feedbackTitle": "Feedback",
+    "newFeedback": "New feedback from ",
+    "userId": "User ID:",
+    "feedbackContentE": "Feedback content"
 }

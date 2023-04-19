@@ -25,5 +25,5 @@ module.exports = {
 module.exports.help = {
     dm: true,
     autorisation: "createur",
-    langues: require("../utils/getLangues")()
+    langues: true
 }

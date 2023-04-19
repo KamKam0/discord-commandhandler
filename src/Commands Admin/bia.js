@@ -120,5 +120,5 @@ module.exports.help = {
     name: "bia",
     dm: true,
     autorisation: "Be an admnistrator",
-    langues: require("../utils/getLangues")()
+    langues: true
 }

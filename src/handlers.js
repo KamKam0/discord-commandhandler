@@ -1,11 +1,31 @@
 const Handler = require("./handler")
-const systemeLanguages = require("./utils/getLangues")()
+const systemLanguages = require("./utils/getLangues")()
 
 class Handlers{
+    #systemLanguages
+
     constructor(langues){
+
         this.names = []
         this.langues = langues
         this.handlers = this.automaticAdd()
+        this.#systemLanguages = systemLanguages
+    }
+
+    addLanguage(json){
+        let validatedData = null;
+        try{
+            validatedData = JSON.parse(json)
+        }catch(err){
+            return this
+        }
+        if(!validatedData["commands"] || !validatedData["choices"] || !validatedData["options"] || !validatedData["languageCode"] || !validatedData["langue"]) return this
+        this.#systemLanguages.push(validatedData)
+        return this
+    }
+
+    getLanguages(){
+        return this.#systemLanguages
     }
 
     automaticAdd(){
@@ -115,11 +135,14 @@ class Handlers{
         if(type_s.value === 2) command = this.getCommandfi(name) || this.getHandler("Admin").getCommand(name)
         if(type_s.value === 0) command = this.getCommandfi(name)
         
-        let Langue = await this.#findLangue(bot, receiving)
-        let languageSystem = systemeLanguages.find(lan => lan.languageCode === Langue.languageCode) || systemeLanguages.find(lan => lan.languageCode === bot.config.general.language) || systemeLanguages.find(lan => lan.languageCode === "en-US")
+        let Langue = this.#findLangue(bot, receiving)
+
+
+        let languageSystem = this.#systemLanguages.find(lan => lan.languageCode === Langue.languageCode) || this.#systemLanguages.find(lan => lan.languageCode === bot.config.general.language) || this.#systemLanguages.find(lan => lan.languageCode === "en-US")
 
         if(command){
             if(command.help.message === false && receiving.receivingType === "message") return
+
             if(receiving.guild_id && command.onlydm) return receiving.reply({content: languageSystem["la_239"], ephemeral: true}).catch(err => {})
             if(!receiving.guild_id && !command.dm_permission) return receiving.reply({content: languageSystem['la_326'], ephemeral: true}).catch(err => {})
             
@@ -137,8 +160,8 @@ class Handlers{
                 bot.cooldown.GetCooldown("commands").AddUser({id: receiving.user_id, properties: [{command: command.name}], time: Number(command.help.cooldown)})
             }
 
-            if(command.name === "help") command.execute(bot, receiving, Langue, command.help.langues.find(la => la.languageCode === languageSystem.languageCode))
-            else if(command.help.langues && command.help.langues[0]) Langue = command.help.langues.find(la => la.languageCode === languageSystem.languageCode)
+            if(command.name === "help") command.execute(bot, receiving, Langue, languageSystem)
+            else if(command.help.langue) Langue = languageSystem
             
             if(command.name !== "help") command.execute(bot, receiving, Langue)
         }
@@ -150,7 +173,7 @@ class Handlers{
         }
     }
 
-    async #findLangue(bot, receiving){
+    #findLangue(bot, receiving){
         let LangueIntern;
         if(receiving.guild_id){
             let baseFoundLanguage = bot.langues.find(lan => lan.languageCode === receiving.guild.preferred_locale)
