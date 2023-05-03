@@ -65,6 +65,7 @@
     "h_2": "J'ai tourné la page !",
     "feedback_7": "Merci d'indiquer un contenu de feedback correct",
     "feedback_1": "Un problème est survenue avec le channel d'envoi des feedbacks, le créateur en a été averti, merci de réessayer plus tard.",
+    "feedback_1_err": "Un problème est survenue avec le channel d'envoi des feedbacks, merci de contacter le créateur du bot pour le signaler.",
     "feedback_2": "Une erreur est survenue avec le channel d'envoi des feedbacks, merci de le modifier",
     "feedback_3": "Le feedback ne doit pas dépasser 1500 caractères",
     "feedback_4": "Nouveau Feedback de",

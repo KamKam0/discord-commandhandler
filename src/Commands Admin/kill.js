@@ -3,7 +3,7 @@ module.exports = {
         const Discord = require("@kamkam1_0/discord.js")
         const bdd = bot.config
 
-        if(receiving.user.id !== bdd["general"]["ID createur"]) return
+        if(receiving.user.id !== bdd["general"]["creatorId"]) return
         const embed = new Discord.Embed()
         .setColor("RED")
         .setDescription("Êtes-vous sur de vouloir éteindre le bot sans possibilité de redémarrage à distance ?")
@@ -17,7 +17,7 @@ module.exports = {
         .setStyle("SECONDARY")
         let msg = await receiving.reply({embeds: [embed], components: [boutton, boutton2]}).catch(err => {})
         
-        bot.awaitInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 15, id: ["kill", "not_kill"], number: 1, user_id: bot.config.general["ID createur"]})
+        bot.awaitInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 15, id: ["kill", "not_kill"], number: 1, user_id: bot.config.general["creatorId"]})
         .then(int => {
             msg.delete()
             if(!int[0]) return

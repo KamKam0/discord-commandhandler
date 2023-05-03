@@ -146,7 +146,7 @@ class Handlers{
             if(receiving.guild_id && command.onlydm) return receiving.reply({content: languageSystem["la_239"], ephemeral: true}).catch(err => {})
             if(!receiving.guild_id && !command.dm_permission) return receiving.reply({content: languageSystem['la_326'], ephemeral: true}).catch(err => {})
             
-            if(receiving.user_id !== bot.config.general["ID createur"] && command.help.cooldown){
+            if(receiving.user_id !== bot.config.general["creatorId"] && command.help.cooldown){
                 if(bot.cooldown && bot.cooldown.GetCooldown("global")) if(bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, [])) return bot.warn_se(languageSystem["cold_err3"].replace("00", bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, []).GetTime()), receiving).catch(err => {})
                 if(bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}])){
                     

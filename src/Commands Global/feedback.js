@@ -27,9 +27,14 @@ module.exports = {
             let feedback = int[0].getComponent("feedback_content").value
             let c = bot.channels.get(bot.config.general["fbackchannel"])
             if(!c){
-                int[0].error(Langue["feedback_1"]).catch(err =>{})
-                bot.messages.send(bot.creator.channel_id, {content: Langue["feedback_2"]})
-                return
+                if (bot.creator?.channel_id) {
+                    int[0].error(Langue["feedback_1"]).catch(err =>{})
+                    bot.messages.send(bot.creator.channel_id, {content: Langue["feedback_2"]})
+                    return
+                }else{
+                    int[0].error(Langue["feedback_1_err"]).catch(err =>{})
+                    return
+                }
             }
             if(!feedback || String(feedback).trim().length === 0) return int[0].error(Langue["feedback_7"]).catch(err =>{})
             if(feedback.length > 1500) return int[0].error(Langue["feedback_3"]).catch(err =>{})
