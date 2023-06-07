@@ -110,7 +110,7 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
     }
     let collector = bot.commands.collectInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 3*1000, id: ["help_right", "help_left"], user_id: receiving.user_id})
     collector.once("end", () => {
-        if(receiving.receivingType === "interaction") receiving.deletereply()
+        if(receiving.receivingType === "interaction") receiving.deleteReply()
         if(receiving.receivingType === "message") msg.delete()
     })
     collector.on("collecting", (bo, da) => {
