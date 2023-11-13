@@ -18,7 +18,7 @@
   "author": "KamKam <kamkam.dev.contact@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "@kamkam1_0/discord.js": "^3.3.9",
-    "@kamkam1_0/discord-eventhandler": "^1.1.6"
+    "@kamkam1_0/discord.js": "^4.1.10",
+    "@kamkam1_0/discord-eventhandler": "^1.2.12"
   }
 }
