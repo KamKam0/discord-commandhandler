@@ -147,17 +147,17 @@ class Handlers{
             if(!receiving.guild_id && !command.dm_permission) return receiving.reply({content: languageSystem['la_326'], ephemeral: true}).catch(err => {})
             
             if(receiving.user_id !== bot.config.general["creatorId"] && command.help.cooldown){
-                if(bot.cooldown && bot.cooldown.GetCooldown("global")) if(bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, [])) return bot.warn_se(languageSystem["cold_err3"].replace("00", bot.cooldown.GetCooldown("global").GetUser(receiving.user_id, []).GetTime()), receiving).catch(err => {})
-                if(bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}])){
+                if(bot.cooldown && bot.cooldown.getCooldown("global")) if(bot.cooldown.getCooldown("global").getUser(receiving.user_id, [])) return bot.warn_se(languageSystem["cold_err3"].replace("00", bot.cooldown.getCooldown("global").getUser(receiving.user_id, []).getTime()), receiving).catch(err => {})
+                if(bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}])){
                     
-                    if(bot.cooldown.GetCooldown("verif").GetUser(receiving.user_id, [{command: command.name}])) return
+                    if(bot.cooldown.getCooldown("verif").getUser(receiving.user_id, [{command: command.name}])) return
                     
-                    bot.cooldown.GetCooldown("verif").AddUser({id: receiving.user_id, properties: [{command: command.name}], time: bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}]).GetTime()})
-                    return receiving.warn(languageSystem["cold_err"].replace("00", bot.cooldown.GetCooldown("commands").GetUser(receiving.user_id, [{command: command.name}]).GetTime() + " seconds")).catch(err => {console.log(err)})
+                    bot.cooldown.getCooldown("verif").addUser({id: receiving.user_id, properties: [{command: command.name}], time: bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}]).getTime()})
+                    return receiving.warn(languageSystem["cold_err"].replace("00", bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}]).getTime() + " seconds")).catch(err => {console.log(err)})
                 }
                 
-                if(bot.cooldown && bot.cooldown.GetCooldown("global")) bot.cooldown.GetCooldown("global").AddUser({id: receiving.user_id, time: 10})
-                bot.cooldown.GetCooldown("commands").AddUser({id: receiving.user_id, properties: [{command: command.name}], time: Number(command.help.cooldown)})
+                if(bot.cooldown && bot.cooldown.getCooldown("global")) bot.cooldown.getCooldown("global").addUser({id: receiving.user_id, time: 10})
+                bot.cooldown.getCooldown("commands").addUser({id: receiving.user_id, properties: [{command: command.name}], time: Number(command.help.cooldown)})
             }
 
             if(command.name === "help") command.execute(bot, receiving, Langue, languageSystem)
