@@ -121,7 +121,9 @@ class Handlers{
     }
 
     async analyse(bot, receiving){
-        let type_s = await bot._userStatus(receiving.user_id)
+        let type_s = {
+            value: 0
+        }
         let name;
         let command;
 
