@@ -1,8 +1,10 @@
+const Discord = require("@kamkam1_0/discord.js")
+
 module.exports = {
     async execute(bot , receiving, Langue){
-        const Discord = require("@kamkam1_0/discord.js")
-
-        if(receiving.receivingType === "message") return receiving.error("Pour exécuter la commande feedback, vous devez passer pour la commande slash")
+        if(receiving.receivingType === "message") {
+            return receiving.error("Pour exécuter la commande feedback, vous devez passer pour la commande slash")
+        }
 
         const TextInput = new Discord.TextInput()
         .setCustomID("feedback_content")
@@ -23,10 +25,11 @@ module.exports = {
         bot.commands.awaitInteractions({id: "modal_feedback", user_id: receiving.user_id, number: 1})
         .then(int => {
             if(!int[0]) return
-            const Discord = require("@kamkam1_0/discord.js")
+
             let feedback = int[0].getComponent("feedback_content").value
-            let c = bot.channels.get(bot.config.general["fbackchannel"])
-            if(!c){
+            let feedbackChannel = bot.channels.get(bot.config.general["fbackchannel"])
+
+            if(!feedbackChannel){
                 if (bot.creator?.channel_id) {
                     int[0].error(Langue["feedback_1"]).catch(err =>{})
                     bot.messages.send(bot.creator.channel_id, {content: Langue["feedback_2"]})
@@ -36,19 +39,24 @@ module.exports = {
                     return
                 }
             }
+
             if(!feedback || String(feedback).trim().length === 0) return int[0].error(Langue["feedback_7"]).catch(err =>{})
+
             if(feedback.length > 1500) return int[0].error(Langue["feedback_3"]).catch(err =>{})
+
             let embed = new Discord.Embed()
             .setTitle(Langue["newFeedback"] + int[0].user.username)
             .setThumbnail(int[0].user.avatarURL)
             .setFooterText(Langue["userId"] + " " + `${int[0].user.id}`)
             .addField(Langue["feedbackContentE"], feedback)
             .setColor("BLUE")
+
             const RespondButton = new Discord.Button()
             .setCustomID("response_ticket_button")
             .setEmoji("📥")
             .setStyle("Danger")
-            c.send({embeds: [embed], components: [RespondButton]}).catch(err =>{ })
+
+            feedbackChannel.send({embeds: [embed], components: [RespondButton]}).catch(err =>{ })
             int[0].success(Langue["feedback_6"]).catch(err =>{})
         })
     }
@@ -56,7 +64,6 @@ module.exports = {
 
 module.exports.help = {
     dm: true,
-    autorisation: "AUCUNE",
-    cooldown: 86400,
+    cooldown: 1000 * 60 * 60 * 24,
     langues: true
 }

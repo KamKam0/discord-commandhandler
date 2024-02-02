@@ -40,19 +40,19 @@ class Handler{
     }
 
     init(){
-        if(this.name === "Admin" || this.name === "Global"){
+        if(this.name === "admin" || this.name === "global"){
             let liste;
-            if(this.name === "Admin"){
-                let path = require.resolve("./Commands Admin/kill.js")
+            if(this.name === "admin"){
+                let path = require.resolve("./admin/kill.js")
                 liste = fs.readdirSync(path.split("kill")[0])
             }
-            if(this.name === "Global"){
-                let path = require.resolve("./Commands Global/help.js")
+            if(this.name === "global"){
+                let path = require.resolve("./global/help.js")
                 liste = fs.readdirSync(path.split("help")[0])
             }
             let base = []
             liste.forEach(dir => {
-                let path = `./Commands ${this.name}/${dir}`
+                let path = `./${this.name}/${dir}`
                 let file = require(path)
                 if(base.find(e => String(e.name).toLowerCase() === String(dir.split(".")[0]).toLowerCase())) return "already exists"
                 const co = new Command(dir.split(".")[0], file, require.resolve(path), this.name, this.langues)

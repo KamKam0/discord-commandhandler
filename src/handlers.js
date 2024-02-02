@@ -1,5 +1,6 @@
 const Handler = require("./handler")
 const systemLanguages = require("./utils/getLangues")()
+const fs = require("node:fs")
 
 class Handlers{
     #systemLanguages
@@ -30,14 +31,15 @@ class Handlers{
 
     automaticAdd(){
         if(this.names.length === 0){
-            let defa_eve = ["Commands Admin", "Commands Global"]
+            let defa_eve = ["admin", "global"]
             let defaulte = []
             const conv = {
-                "Global": "User",
-                "Admin": "Admin"
+                "global": "User",
+                "admin": "Admin"
             }
             defa_eve.forEach(de => {
-                let name = de.split("Commands")[1].trim()
+                de = de.toLowerCase()
+                let name = de.includes("commands") ? de.split("commands")[1].trim() : de
                 if(name.includes(".")) name = name.split(".")[0]
                 if(this.names.find(e => String(e).toLowerCase() === String(name).toLowerCase())) return "already exists"
                 const co = new Handler(name, conv[name], this.langues)
@@ -71,11 +73,16 @@ class Handlers{
     }
 
     deploy(){
-        const fs = require("node:fs")
-        if(fs.readdirSync(`${process.cwd()}`).includes("Handler")) if(fs.readdirSync(`${process.cwd()}/Handler`).filter(e => !["Systeme", "Events", "Admin", "Process", ".DS_Store"].includes(e)[0])) fs.readdirSync(`${process.cwd()}/Handler`).filter(e => !["Systeme", "Events", "VIP", "Admin", "Process", ".DS_Store"].includes(e)).forEach(dir => {
+        let handlerDir = fs.readdirSync(`${process.cwd()}`).find(dir => dir.toLowerCase() === "handler")
+        if (!handlerDir) return
+
+        let dirToDeploy = fs.readdirSync(`${process.cwd()}/${handlerDir}`)
+        .filter(dir => !["systeme", "events", "admin", ".ds_store"].includes(dir.toLowerCase()))
+
+        dirToDeploy.forEach(dir => {
             if(!this.getHandler(dir)) this.addHandler(dir, "User")
-            fs.readdirSync(`${process.cwd()}/Handler/${dir}`).filter(e => e!==".DS_Store").forEach(command => {
-                let path = `${process.cwd()}/Handler/${dir}/${command}`
+            fs.readdirSync(`${process.cwd()}/${handlerDir}/${dir}`).filter(e => e!==".DS_Store").forEach(command => {
+                let path = `${process.cwd()}/${handlerDir}/${dir}/${command}`
                 let file = require(path)
                 this.getHandler(dir).addCommand(command.split(".")[0], file, path, dir)
             })
@@ -101,41 +108,19 @@ class Handlers{
         return commands
     }
 
-    getCommandfi(namee){
-        let cmd;
-        this.names.filter(na => !(/(Admin|VIP)/gm).test(na)).forEach(name => {
-            let commandsHandler = this.handlers.find(c => c.name === name)
-            if(!cmd && commandsHandler?.getCommand(namee)) cmd = commandsHandler?.getCommand(namee)
-        })
-        if(!cmd) cmd = null
-        return cmd
-    }
-
-    getCommandsfi(){
-        let commands = []
-        this.names.filter(na => !(/(Admin|VIP)/gm).test(na)).forEach(name => {
-            let commandsHandler = this.handlers.find(c => c.name === name)
-            if(commandsHandler) commands.push(...commandsHandler.getCommands())
-        })
-        return commands
-    }
-
     async analyse(bot, receiving){
-        let type_s = {
-            value: 0
-        }
         let name;
-        let command;
 
-        if(receiving.receivingType === "message") name = receiving.content.split(bot.user.id)[1].slice(1).split(" ").filter(e => e !== "")[0]
-        else if(receiving.receivingType === "interaction") name = receiving.name
+        if(receiving.receivingType === "message") {
+            name = receiving.content.split(bot.user.id)[1].slice(1).split(" ").filter(e => e !== "")[0]
+        }
+        else if(receiving.receivingType === "interaction") {
+            name = receiving.name
+        }
 
         if(!name) return
         
-        if(type_s.value === 4 || type_s.value === 3) command = this.getCommand(name)
-        if(type_s.value === 1) command = this.getCommandfi(name) || this.getHandler("VIP").getCommand(name)
-        if(type_s.value === 2) command = this.getCommandfi(name) || this.getHandler("Admin").getCommand(name)
-        if(type_s.value === 0) command = this.getCommandfi(name)
+        let command = this.getCommand(name)
         
         let Langue = this.#findLangue(bot, receiving)
 
@@ -145,27 +130,45 @@ class Handlers{
         if(command){
             if(command.help.message === false && receiving.receivingType === "message") return
 
-            if(receiving.guild_id && command.onlydm) return receiving.reply({content: languageSystem["la_239"], ephemeral: true}).catch(err => {})
-            if(!receiving.guild_id && !command.dm_permission) return receiving.reply({content: languageSystem['la_326'], ephemeral: true}).catch(err => {})
+            if(receiving.guild_id && command.onlydm) {
+                return receiving.reply({content: languageSystem["la_239"], ephemeral: true}).catch(err => {})
+            }
+            if(!receiving.guild_id && !command.dm_permission) {
+                return receiving.reply({content: languageSystem['la_326'], ephemeral: true}).catch(err => {})
+            }
             
             if(receiving.user_id !== bot.config.general["creatorId"] && command.help.cooldown){
-                if(bot.cooldown && bot.cooldown.getCooldown("global")) if(bot.cooldown.getCooldown("global").getUser(receiving.user_id, [])) return bot.warn_se(languageSystem["cold_err3"].replace("00", bot.cooldown.getCooldown("global").getUser(receiving.user_id, []).getTime()), receiving).catch(err => {})
+                if(bot.cooldown && bot.cooldown.getCooldown("global")) {
+                    if(bot.cooldown.getCooldown("global").getUser(receiving.user_id, [])) {
+                        return bot.warn_se(languageSystem["cold_err3"].replace("00", bot.cooldown.getCooldown("global").getUser(receiving.user_id, []).getTime()), receiving).catch(err => {})
+                    }
+                }
                 if(bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}])){
                     
                     if(bot.cooldown.getCooldown("verif").getUser(receiving.user_id, [{command: command.name}])) return
                     
-                    bot.cooldown.getCooldown("verif").addUser({id: receiving.user_id, properties: [{command: command.name}], time: bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}]).getTime()})
+                    bot.cooldown.getCooldown("verif")
+                    .addUser({id: receiving.user_id, properties: [{command: command.name}], time: bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}]).getTime()})
+
                     return receiving.warn(languageSystem["cold_err"].replace("00", bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}]).getTime() + " seconds")).catch(err => {console.log(err)})
                 }
                 
-                if(bot.cooldown && bot.cooldown.getCooldown("global")) bot.cooldown.getCooldown("global").addUser({id: receiving.user_id, time: 10})
+                if(bot.cooldown && bot.cooldown.getCooldown("global")) {
+                    bot.cooldown.getCooldown("global").addUser({id: receiving.user_id, time: 10})
+                }
                 bot.cooldown.getCooldown("commands").addUser({id: receiving.user_id, properties: [{command: command.name}], time: Number(command.help.cooldown)})
             }
 
-            if(command.name === "help") command.execute(bot, receiving, Langue, languageSystem)
-            else if(command.help.langues) Langue = languageSystem
+            if(command.name === "help") {
+                command.execute(bot, receiving, Langue, languageSystem)
+            }
+            else if(command.help.langues) {
+                Langue = languageSystem
+            }
             
-            if(command.name !== "help") command.execute(bot, receiving, Langue)
+            if(command.name !== "help") {
+                command.execute(bot, receiving, Langue)
+            }
         }
 
         if(!command && receiving.receivingType === "interaction"){
@@ -179,13 +182,23 @@ class Handlers{
         let LangueIntern;
         if(receiving.guild_id){
             let baseFoundLanguage = bot.langues.find(lan => lan.languageCode === receiving.guild.preferred_locale)
-            if(baseFoundLanguage) LangueIntern = baseFoundLanguage
-            else LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
+            if(baseFoundLanguage) {
+                LangueIntern = baseFoundLanguage
+            }
+            else {
+                LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
+            }
         }else if (receiving.receivingType === "interaction"){
             let baseFoundLanguage = bot.langues.find(lan => lan.languageCode === receiving.locale)
-            if(baseFoundLanguage) LangueIntern = baseFoundLanguage
-            else LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
-        }else LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
+            if(baseFoundLanguage) {
+                LangueIntern = baseFoundLanguage
+            }
+            else {
+                LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
+            }
+        }else {
+            LangueIntern = bot.langues.find(lan => lan.languageCode === bot.config.general.language)
+        }
         return LangueIntern
     }
 }

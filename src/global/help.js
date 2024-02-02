@@ -1,6 +1,7 @@
+const Discord = require("@kamkam1_0/discord.js")
+
 module.exports = {
     async execute(bot , receiving, Langue, Langue2){
-        const Discord = require("@kamkam1_0/discord.js")
         let precision;
         
         if(receiving.receivingType === "interaction") precision =  receiving.options.length ? receiving.options[0].value: undefined
@@ -8,22 +9,11 @@ module.exports = {
 
         let embed = new Discord.Embed()
         .setColor("PURPLE")
-
-        let VID = receiving.user.id
-        let type_s = {
-            value: 0
-        }
-
+        
         if(precision){
-            let commandt;
-                    
-            if(type_s.value === 4 || type_s.value === 3) commandt = bot.handler.getCommand(precision)
-            if(type_s.value === 1) commandt = bot.handler.getCommandfi(precision) || bot.handler.getHandler("VIP").getCommand(precision)
-            if(type_s.value === 2) commandt = bot.handler.getCommandfi(precision) || bot.handler.getHandler("Admin").getCommand(precision)
-            if(type_s.value === 0) commandt = bot.handler.getCommandfi(precision)
+            let commandt = bot.handler.getCommand(precision)
 
             if(commandt){
-                if(commandt.help.nsfw && type_s.value !== 4) return base_protocole(bot, embed, type_s, Langue, receiving, Langue2)
                 let commandLanguage = commandt.help.langues?.find(lan => lan.languageCode === Langue.languageCode) || commandt.help.langues?.find(lan => lan.languageCode === "en-US") || Langue
                 
                 let p;
@@ -45,7 +35,7 @@ module.exports = {
                 embed
                 .setTitle("⁉️ " + Langue2["Commande"] + " " + commandt.help.name + " ⁉️")
 
-                let text = `__${Langue2["Nom de la commande"]}__ : ${commandt.name}\n\n__${Langue2["Description de la commande"]}__ : ${commandLanguage["commands"][`${commandt.name}_description`]}\n\n__${Langue2["Autorisation pour exéctuer la commande"]}__ : ${commandt.help.autorisation || Langue2["no_auto"]}\n\n__${Langue2["Cooldown"]}__ : ${commandt.help.cooldown}\n\n__${Langue2["Accessibilité"]}__: ${p}`
+                let text = `__${Langue2["Nom de la commande"]}__ : ${commandt.name}\n\n__${Langue2["Description de la commande"]}__ : ${commandLanguage["commands"][`${commandt.name}_description`]}\n\n__${Langue2["Cooldown"]}__ : ${commandt.help.cooldown}\n\n__${Langue2["Accessibilité"]}__: ${p}`
 
                 let aliases = commandt.help.aliases
                 if(aliases) text += `\n\n__${Langue2["Aliaces de la commande"]}__: \`\`${aliases.toString()}\`\``
@@ -67,15 +57,15 @@ module.exports = {
                 
                 receiving.reply({embeds: [embed]}).catch(err =>{})
                 
-            }else base_protocole(bot, embed, type_s, Langue, receiving, Langue2)
-        }else base_protocole(bot, embed, type_s, Langue, receiving, Langue2)
+            }else base_protocole(bot, embed, Langue, receiving, Langue2)
+        }else base_protocole(bot, embed, Langue, receiving, Langue2)
     }
 }
 
-function base_protocole(bot, embed, type_s, Langue, receiving, Langue2){
-    let toadd = []
-    if(type_s.value !== 4 && type_s.value === 4) toadd = bot.handler.handlers.map(ha => ha.name)
-    else toadd = bot.handler.handlers.filter(ha => (type_s.value >= translate_level(ha.level)) && ha.name !== "NSFWS" ).map(ha => ha.name)
+function base_protocole(bot, embed, Langue, receiving, Langue2){
+    let toadd = receiving.user_id === bot.config.general.creatorId 
+    ? bot.handler.handlers.map(ha => ha.name)
+    : bot.handler.handlers.filter(handler => handler.name.toLowerCase() !== 'admin').map(ha => ha?.name).filter(Boolean)
 
     toadd = toadd.map((name, acc) => {
         return {position: acc, name: name}
@@ -97,7 +87,6 @@ function base_protocole(bot, embed, type_s, Langue, receiving, Langue2){
 }
 
 async function send_protocole(bot, embed, receiving, Langue, Langue2){
-    const Discord = require("@kamkam1_0/discord.js")
     let buttonleft = new Discord.Button()
     .setCustomID("help_left")
     .setStyle("Secondary")
@@ -160,28 +149,14 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
     })
 }
 
-function translate_level(level){
-    if(typeof level === "number") return level
-    level = String(level).toLowerCase()
-    let convert = {
-        "user": 0,
-        "vip": 1,
-        "admin": 2,
-        "superadmin": 3,
-        "owner": 4
-    }
-    let transfo = convert[level]
-    return transfo
-}
-
 module.exports.help = {
     dm: true,
     cooldown: 3,
     options: [
         {
-          name: "option",
-          required: false,
-          type: 3
+            name: "option",
+            required: false,
+            type: 3
         }
     ],
     langues: true

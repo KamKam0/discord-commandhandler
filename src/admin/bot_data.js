@@ -1,24 +1,20 @@
+const Discord = require("@kamkam1_0/discord.js")
+const os = require("node:os")
+const getUptime = require('../utils/getUptime')
+
 module.exports = {
     async execute(bot, receiving){
-        const Discord = require("@kamkam1_0/discord.js")
-        const os = require("node:os")
+        if(receiving.user.id !== bdd["general"]["creatorId"]) return
+
         let embed = new Discord.Embed()
         .setColor("RED")
 
+        let defTime = getUptime()
         let average = 0
-        let seconds = +(process.uptime()).toFixed(0)
-        let minutes = getReal(seconds / 60)
-        let hours = getReal(minutes / 60)
-        let days = getReal(hours / 24)
-        
-        let times = { days, hours,  minutes, seconds }
-        let biggestUptime = Object.entries(times).filter(entry => entry[1])[0]
-        let defTime = `${biggestUptime[1]} ${biggestUptime[0]}`
-        
         let type
     
         if(receiving.receivingType === "interaction"){
-            type = receiving.data.options.find(int => int.name === "1") ? receiving.data.options.find(int => int.name === "1").value: undefined
+            type = receiving.options.find(int => int.name === "1") ? receiving.options.find(int => int.name === "1").value: undefined
         }
         if(receiving.receivingType === "message"){
             type = receiving.content.split(" ")[2]
@@ -31,7 +27,6 @@ module.exports = {
                     {name: "Memory used", value: Number(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(1) + ' Mb', inline: true},
                     {name: "Memory total", value: Number(os.totalmem() / 1024 / 1024).toFixed(2) + " Mb", inline: true}
                 )
-                receiving.reply({embeds: [embed]}).catch(err =>{})
             break;
             case("pc"):
                 embed
@@ -41,8 +36,6 @@ module.exports = {
                     {name: "OS", value: os.platform(), inline: true},
                     {name: "Version OS", value: `${os.type()} ${os.release()}`, inline: true}
                 )
-
-                receiving.reply({embeds: [embed]}).catch(err =>{})
             break;
             case("processor"):
                 os.cpus().forEach(cpu => average += cpu.speed )
@@ -54,8 +47,6 @@ module.exports = {
                     {name: "Cores of processor", value: os.cpus().length + " cores", inline: true},
                     {name: "Clock Avergarde", value: average + " MHz", inline: true},
                 )
-                
-                receiving.reply({embeds: [embed]}).catch(err =>{})
             break;
             case("versions"):
                 embed
@@ -64,7 +55,6 @@ module.exports = {
                     {name: "Version of Node.js", value: process.version, inline: true},
                     {name: "Version of Discord.js", value: Discord.version, inline: true},
                 )
-                receiving.reply({embeds: [embed]}).catch(err =>{})
             break;
             case("guildsize"):
                 embed
@@ -73,7 +63,6 @@ module.exports = {
                     {name: "Guild count", value: `${bot.guilds.length}`, inline: true},
                     {name: "Users count", value: `${bot.guilds.map(g => g.membercount).reduce((a, b) => (a + b))}`, inline: true},
                 )
-                receiving.reply({embeds: [embed]}).catch(err =>{})
             break;
             case("uptime"):
                 embed
@@ -81,7 +70,6 @@ module.exports = {
                 .addFields(
                     {name: "Uptime", value: defTime, inline: true},
                 )
-                receiving.reply({embeds: [embed]}).catch(err =>{})
             break;
             default:
                 os.cpus().forEach(cpu => average += cpu.speed )
@@ -109,30 +97,15 @@ module.exports = {
                     {name: "\u200b", value: "\u200b", inline: true},
                 )
                 .setColor("RED")
-
-                receiving.reply({embeds: [embed]}).catch(err =>{})
                             
             break;
         }
-        
-    }
-}
 
-function getReal(value){
-    if (!value) {
-        return 0
+        receiving.reply({embeds: [embed]}).catch(err =>{})
     }
-
-    if (String(value).includes('.')) {
-        return +(String(value).split('.')[0])
-    }
-
-    return value
 }
 
 module.exports.help = {
-    name: "bot_data",
     dm: true,
-    autorisation: "Be an admnistrator",
     langues: true
 }
