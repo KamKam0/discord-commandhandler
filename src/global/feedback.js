@@ -64,6 +64,6 @@ module.exports = {
 
 module.exports.help = {
     dm: true,
-    cooldown: 1000 * 60 * 60 * 24,
+    cooldown: 86400000,
     langues: true
 }

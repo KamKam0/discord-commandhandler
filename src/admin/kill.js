@@ -11,16 +11,16 @@ module.exports = {
         const boutton = new Discord.Button()
         .setEmoji("✅")
         .setCustomID("kill")
-        .setStyle("DANGER")
+        .setStyle("Danger")
 
         const boutton2 = new Discord.Button()
         .setEmoji("❌")
         .setCustomID("not_kill")
-        .setStyle("SECONDARY")
+        .setStyle("Secondary")
 
         let msg = await receiving.reply({embeds: [embed], components: [boutton, boutton2]}).catch(err => {})
         
-        bot.awaitInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 15, id: ["kill", "not_kill"], number: 1, user_id: bot.config.general["creatorId"]})
+        bot.commands.awaitInteractions({channel_id: msg.channel_id, message_id: msg.id, time: 15, id: ["kill", "not_kill"], number: 1, user_id: bot.config.general["creatorId"]})
         .then(int => {
             msg.delete()
 

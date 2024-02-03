@@ -4,7 +4,7 @@ const getUptime = require('../utils/getUptime')
 
 module.exports = {
     async execute(bot, receiving){
-        if(receiving.user.id !== bdd["general"]["creatorId"]) return
+        if(receiving.user.id !== bot.config["general"]["creatorId"]) return
 
         let embed = new Discord.Embed()
         .setColor("RED")

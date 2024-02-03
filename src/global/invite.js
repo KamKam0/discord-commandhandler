@@ -5,7 +5,7 @@ module.exports = {
 
         let embed = new Discord.Embed()
         .setTitle(Langue["bot_s1"])
-        .setDescription(`${Langue["Here is my invite link"]}: https://discord.com/api/oauth2/authorize?client_id=${bot.user.id}&permissions=414464658432&scope=applications.commands%20bot\n\nDiscord: ${bot.config.general.inviteDiscord}`)
+        .setDescription(`${Langue["Here is my invite link"]}: https://discord.com/api/oauth2/authorize?client_id=${bot.user.id}&permissions=274878024704&scope=bot+applications.commands${bot.config.general.inviteDiscord ? `\n\nDiscord: ${bot.config.general.inviteDiscord}` : ''}`)
         .setFooterText(`${bot.user.tag}`)
         .setFooterIconURL(receiving.user.avatarURL)
         .setThumbnail(bot.user.avatarURL)

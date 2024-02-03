@@ -108,6 +108,17 @@ class Handlers{
         return commands
     }
 
+    getUserCommands(){
+        let commands = []
+        this.names
+        .filter(name => name.toLowerCase() !== 'admin')
+        .forEach(name => {
+            let commandsHandler = this.handlers.find(c => c.name === name)
+            if(commandsHandler) commands.push(...commandsHandler.getCommands())
+        })
+        return commands
+    }
+
     async analyse(bot, receiving){
         let name;
 
@@ -138,11 +149,6 @@ class Handlers{
             }
             
             if(receiving.user_id !== bot.config.general["creatorId"] && command.help.cooldown){
-                if(bot.cooldown && bot.cooldown.getCooldown("global")) {
-                    if(bot.cooldown.getCooldown("global").getUser(receiving.user_id, [])) {
-                        return bot.warn_se(languageSystem["cold_err3"].replace("00", bot.cooldown.getCooldown("global").getUser(receiving.user_id, []).getTime()), receiving).catch(err => {})
-                    }
-                }
                 if(bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}])){
                     
                     if(bot.cooldown.getCooldown("verif").getUser(receiving.user_id, [{command: command.name}])) return
@@ -153,9 +159,6 @@ class Handlers{
                     return receiving.warn(languageSystem["cold_err"].replace("00", bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}]).getTime() + " seconds")).catch(err => {console.log(err)})
                 }
                 
-                if(bot.cooldown && bot.cooldown.getCooldown("global")) {
-                    bot.cooldown.getCooldown("global").addUser({id: receiving.user_id, time: 10})
-                }
                 bot.cooldown.getCooldown("commands").addUser({id: receiving.user_id, properties: [{command: command.name}], time: Number(command.help.cooldown)})
             }
 

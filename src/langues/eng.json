@@ -26,10 +26,10 @@
         "kill_description": "Kill the process of the bot",
         "kill_composition": "/kill",
         "kill_exemple": "/kill",
-        "load_name": "load",
-        "load_description": "Reload/Unload a command",
-        "load_composition": "/load [unload/reload] [command_name]",
-        "load_exemple": "/load unload admin",
+        "unload_name": "unload",
+        "unload_description": "unload a command",
+        "unload_composition": "/unload [command_name]",
+        "unload_exemple": "/unload admin",
         "restart_name": "restart",
         "restart_description": "Restart the bot",
         "restart_composition": "/restart",
@@ -62,7 +62,6 @@
     },
     "Aide": "Help",
     "h_1": "Thanks to execute the command again, this message is too old !",
-    "h_2": "I turned the page !",
     "feedback_7": "Thanks to indicate a correct feedback content",
     "feedback_1": "An error occured with the channel where I send the feedbacks, the creator is now aware of the problem !.",
     "feedback_1_err": "An error occured with the channel where I send the feedbacks, thanks to reach the creator of this bot to signal the problem !.",
@@ -110,5 +109,7 @@
     "feedbackTitle": "Feedback",
     "newFeedback": "New feedback from ",
     "userId": "User ID:",
-    "feedbackContentE": "Feedback content"
+    "feedbackContentE": "Feedback content",
+    "Nom": "Name",
+    "ID": "ID"
 }

@@ -46,10 +46,10 @@
         "invite_description": "Obtenir l'invitation du bot",
         "invite_composition": "/invite",
         "invite_exemple": "/invite",
-        "load_name": "load",
-        "load_description": "Reload/Unload a command",
-        "load_composition": "/load [unload/reload] [command_name]",
-        "load_exemple": "/load unload admin"
+        "unload_name": "unload",
+        "unload_description": "unload a command",
+        "unload_composition": "/unload [command_name]",
+        "unload_exemple": "/unload admin"
     },
     "options":{
         "help_option_name": "command_name",
@@ -62,7 +62,6 @@
     },
     "Aide": "Aide",
     "h_1": "Merci d'éxecuter la commande à nouveau, ce message est trop ancien !",
-    "h_2": "J'ai tourné la page !",
     "feedback_7": "Merci d'indiquer un contenu de feedback correct",
     "feedback_1": "Un problème est survenue avec le channel d'envoi des feedbacks, le créateur en a été averti, merci de réessayer plus tard.",
     "feedback_1_err": "Un problème est survenue avec le channel d'envoi des feedbacks, merci de contacter le créateur du bot pour le signaler.",
@@ -112,5 +111,7 @@
     "feedbackTitle": "Feedback",
     "newFeedback": "Nouveau feedback de ",
     "userId": "ID Utilisateur:",
-    "feedbackContentE": "Contenu du feedback"
+    "feedbackContentE": "Contenu du feedback",
+    "Nom": "Nom",
+    "ID": "ID"
 }
