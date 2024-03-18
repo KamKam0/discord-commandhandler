@@ -1,6 +1,6 @@
 {
   "name": "@kamkam1_0/discord-commandhandler",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
