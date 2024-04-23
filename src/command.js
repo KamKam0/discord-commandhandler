@@ -11,6 +11,7 @@ class Command{
         this.onlydm = false
         this.dm_permission = this.#handledms(datas?.help?.dm)
         this.nsfw = datas.help.nsfw ? datas.help.nsfw : false
+        this.choicesLoader = datas.choicesLoader
     }
 
     getNames(langues){

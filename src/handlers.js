@@ -163,14 +163,22 @@ class Handlers{
             }
 
             if(command.name === "help") {
-                command.execute(bot, receiving, Langue, languageSystem)
+                if (receiving.isAutocomplete) {
+                    command.choicesLoader(bot, receiving, Langue, languageSystem)
+                } else {
+                    command.execute(bot, receiving, Langue, languageSystem)
+                }
             }
             else if(command.help.langues) {
                 Langue = languageSystem
             }
             
             if(command.name !== "help") {
-                command.execute(bot, receiving, Langue)
+                if (receiving.isAutocomplete) {
+                    command.choicesLoader(bot, receiving, Langue)
+                } else {
+                    command.execute(bot, receiving, Langue)
+                }
             }
         }
 
