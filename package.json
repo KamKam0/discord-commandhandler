@@ -18,8 +18,8 @@
   "author": "KamKam <kamkam.dev.contact@gmail.com>",
   "license": "MPL 2.0",
   "dependencies": {
-    "@kamkam1_0/discord.js": "^4.2.1",
-    "@kamkam1_0/discord-eventhandler": "^1.2.13"
+    "@kamkam1_0/discord.js": "4.2.16",
+    "@kamkam1_0/discord-eventhandler": "1.2.18"
   },
   "engines": {
     "node": ">=16"
