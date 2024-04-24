@@ -176,7 +176,11 @@ class Handlers{
         }
 
         if(!command && receiving.receivingType === "interaction"){
-            bot.commands.delete(bot.user.id, receiving);
+            bot.commands.delete(receiving.command_id).catch(() => {
+                if (receiving.guild_id) {
+                    bot.commands.delete(receiving.command_id, receiving.guild_id).catch(() => {})
+                }
+            });
             receiving.info(languageSystem["Int_err"]).catch(err => {})
             return
         }
