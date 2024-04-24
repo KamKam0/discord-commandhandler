@@ -10,7 +10,7 @@ class Command{
         this.names = this.getNames(langues)
         this.nsfw = datas.help.nsfw || false
         this.contexts = datas.help.contexts || null
-        this.guild = datas.help.contexts || null
+        this.guild = datas.help.guild || null
         this.choicesLoader = datas.choicesLoader
     }
 
