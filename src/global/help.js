@@ -12,6 +12,9 @@ module.exports = {
         
         if(precision){
             let commandt = bot.handler.getCommand(precision)
+            if (commandt.guild && receiving.guild_id !== commandt.guild) {
+                commandt = undefined
+            }
 
             if(commandt){
                 let commandLanguage = commandt.help.langues?.find(lan => lan.languageCode === Langue.languageCode) || commandt.help.langues?.find(lan => lan.languageCode === "en-US") || Langue
@@ -139,13 +142,13 @@ async function send_protocole(bot, embed, receiving, Langue, Langue2){
             }
         })
         
-        da.message.modify({embeds: [embed], components: [buttonleft, buttonright]}).catch(err => console.log(err))
+        da.message.modify({embeds: [embed], components: [buttonleft, buttonright]}).catch(() => {})
         
         da.reply({ephemeral: true, content: Langue2["h_2"]}).then(() => {
             setTimeout(() => {
                 da.deleteReply().catch(err => {})
             }, 3 * 1000)
-        }).catch(err => {console.log(err)})
+        }).catch(() => {})
     })
 }
 

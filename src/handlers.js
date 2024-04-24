@@ -135,11 +135,11 @@ class Handlers{
         
         let Langue = this.#findLangue(bot, receiving)
 
-
         let languageSystem = this.#systemLanguages.find(lan => lan.languageCode === Langue.languageCode) || this.#systemLanguages.find(lan => lan.languageCode === bot.config.general.language) || this.#systemLanguages.find(lan => lan.languageCode === "en-US")
 
         if(command){
             if(command.help.message === false && receiving.receivingType === "message") return
+            if (command.guild && receiving.guild_id !== command.guild) return
             
             if(receiving.user_id !== bot.config.general["creatorId"] && command.help.cooldown){
                 if(bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}])){
@@ -149,7 +149,7 @@ class Handlers{
                     bot.cooldown.getCooldown("verif")
                     .addUser({id: receiving.user_id, properties: [{command: command.name}], time: bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}]).getTime()})
 
-                    return receiving.warn(languageSystem["cold_err"].replace("00", bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}]).getTime() + " seconds")).catch(err => {console.log(err)})
+                    return receiving.warn(languageSystem["cold_err"].replace("00", bot.cooldown.getCooldown("commands").getUser(receiving.user_id, [{command: command.name}]).getTime() + " seconds")).catch(() => {})
                 }
                 
                 bot.cooldown.getCooldown("commands").addUser({id: receiving.user_id, properties: [{command: command.name}], time: Number(command.help.cooldown)})
